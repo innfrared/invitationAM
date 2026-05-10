@@ -1,26 +1,28 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Noto_Sans_Armenian, Noto_Serif_Armenian } from "next/font/google";
 
 import { StyledComponentsRegistry } from "./registry";
 
-const serif = Cormorant_Garamond({
-  variable: "--font-serif",
-  subsets: ["latin"],
+const armSerif = Noto_Serif_Armenian({
+  variable: "--font-arm-serif",
+  subsets: ["armenian"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
+  adjustFontFallback: true,
 });
 
-const sans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
+const armSans = Noto_Sans_Armenian({
+  variable: "--font-arm-sans",
+  subsets: ["armenian"],
   weight: ["400", "500", "600", "700"],
   display: "swap",
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
-  title: "50th Birthday Celebration — Arthur",
+  title: "Արթուր Մնացականյանի 50-ամյակի հրավեր",
   description:
-    "You are warmly invited to celebrate a special evening on June 27, 2026.",
+    "Խորհրդավոր տոնական հրավեր։ 27 հունիսի, 2026, Արարատ ռեստորան։",
 };
 
 export default function RootLayout({
@@ -29,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="hy" className={`${armSerif.variable} ${armSans.variable}`}>
       <body>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>

@@ -8,32 +8,27 @@ export const colors = {
   charcoal: "#12141c",
   card: "rgba(10, 10, 16, 0.72)",
   cardBorder: "rgba(214, 177, 94, 0.35)",
+  cream: "rgba(245, 240, 230, 0.92)",
 } as const;
 
 export const fonts = {
-  serif: 'var(--font-serif), "Cormorant Garamond", Georgia, serif',
-  sans: 'var(--font-dm-sans), "DM Sans", system-ui, sans-serif',
+  serif:
+    'var(--font-arm-serif), "Noto Serif Armenian", "Times New Roman", serif',
+  sans: 'var(--font-arm-sans), "Noto Sans Armenian", system-ui, sans-serif',
 } as const;
 
-/** Base animation timings (full motion). */
+export const contentMaxWidth = "min(94vw, 880px)";
+
 export const motion = {
   duration: {
-    fast: 0.5,
-    medium: 0.65,
-    slow: 0.85,
+    fast: 0.45,
+    medium: 0.7,
+    slow: 0.95,
   },
   ease: [0.22, 1, 0.36, 1] as const,
-  /** Stagger delays from page mount (seconds). */
-  invite: {
-    background: 0,
-    divider: 0.35,
-    label: 0.5,
-    greeting: 0.68,
-    bodyLine0: 0.88,
-    bodyLine1: 1.04,
-    date: 1.32,
-    location: 1.52,
-    footer: 1.68,
-    rsvp: 1.92,
+  scroll: {
+    stagger: 0.14,
+    sectionDuration: 0.8,
+    viewportAmount: 0.45,
   },
 } as const;

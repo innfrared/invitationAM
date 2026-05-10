@@ -3,18 +3,18 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-import { colors, fonts, motion as motionTheme } from "@/lib/theme";
+import { colors, fonts, motion as motionCfg } from "@/lib/theme";
 
 const Wrap = styled(motion.div)`
-  margin-top: clamp(1.5rem, 4vw, 1.85rem);
+  margin-top: clamp(0.5rem, 2vw, 1rem);
   text-align: center;
 `;
 
-const Message = styled(motion.p)`
+const Message = styled.p`
   margin: 0 0 1rem;
   font-family: ${fonts.serif};
-  font-size: clamp(1rem, 3.1vw, 1.12rem);
-  line-height: 1.55;
+  font-size: clamp(1.05rem, 3.2vw, 1.2rem);
+  line-height: 1.65;
   color: rgba(245, 240, 230, 0.9);
 `;
 
@@ -24,10 +24,9 @@ const ChangeBtn = styled.button`
   background: none;
   cursor: pointer;
   font-family: ${fonts.sans};
-  font-size: clamp(0.75rem, 2.5vw, 0.8rem);
+  font-size: clamp(0.8rem, 2.6vw, 0.88rem);
   font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: ${colors.goldMuted};
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -52,8 +51,8 @@ type Props = {
 };
 
 const copy: Record<Rsvp, string> = {
-  yes: "Thank you! We’ll be happy to celebrate this special evening with you.",
-  no: "Thank you for letting us know. You’ll be missed.",
+  yes: "Շնորհակալություն։ Ուրախ կլինենք Ձեզ տեսնել այս հատուկ երեկոյին։",
+  no: "Շնորհակալություն պատասխանի համար։ Դուք մեզ շատ կպակասեք։",
 };
 
 export function ConfirmationMessage({
@@ -61,7 +60,7 @@ export function ConfirmationMessage({
   answer,
   onChangeResponse,
 }: Props) {
-  const ease = motionTheme.ease;
+  const ease = motionCfg.ease;
 
   return (
     <Wrap
@@ -72,13 +71,13 @@ export function ConfirmationMessage({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: reducedMotion ? 0 : -6 }}
       transition={{
-        duration: reducedMotion ? 0.25 : motionTheme.duration.medium,
+        duration: reducedMotion ? 0.25 : motionCfg.duration.medium,
         ease,
       }}
     >
       <Message>{copy[answer]}</Message>
       <ChangeBtn type="button" onClick={onChangeResponse}>
-        Change response
+        Փոխել պատասխանը
       </ChangeBtn>
     </Wrap>
   );

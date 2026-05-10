@@ -3,33 +3,33 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-import { colors, fonts, motion as motionTheme } from "@/lib/theme";
+import { colors, fonts, motion as motionCfg } from "@/lib/theme";
 
 const Wrap = styled(motion.div)`
-  margin-top: clamp(1.5rem, 4vw, 1.85rem);
+  width: 100%;
 `;
 
 const ButtonRow = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 
   @media (min-width: 480px) {
     flex-direction: row;
     justify-content: center;
-    gap: 0.85rem;
+    gap: 1.1rem;
   }
 `;
 
 const Primary = styled(motion.button)`
   flex: 1;
-  min-height: 48px;
-  padding: 0.75rem 1.1rem;
+  min-height: 56px;
+  padding: 0.95rem 1.35rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
   font-family: ${fonts.sans};
-  font-size: clamp(0.86rem, 2.8vw, 0.92rem);
+  font-size: clamp(0.92rem, 2.9vw, 1.02rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   color: #121016;
@@ -40,7 +40,7 @@ const Primary = styled(motion.button)`
     ${colors.goldMuted} 100%
   );
   box-shadow:
-    0 2px 16px rgba(214, 177, 94, 0.35),
+    0 4px 28px rgba(214, 177, 94, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
   &:focus-visible {
@@ -51,17 +51,17 @@ const Primary = styled(motion.button)`
 
 const Secondary = styled(motion.button)`
   flex: 1;
-  min-height: 48px;
-  padding: 0.75rem 1.1rem;
-  border-radius: 12px;
+  min-height: 56px;
+  padding: 0.95rem 1.35rem;
+  border-radius: 14px;
   cursor: pointer;
   font-family: ${fonts.sans};
-  font-size: clamp(0.86rem, 2.8vw, 0.92rem);
+  font-size: clamp(0.92rem, 2.9vw, 1.02rem);
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: rgba(245, 240, 230, 0.88);
-  background: rgba(8, 8, 14, 0.55);
-  border: 1px solid rgba(214, 177, 94, 0.45);
+  color: rgba(245, 240, 230, 0.9);
+  background: rgba(8, 8, 14, 0.6);
+  border: 1px solid rgba(214, 177, 94, 0.48);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 
   &:focus-visible {
@@ -81,37 +81,36 @@ export function RSVPButtons({
   onSelectYes,
   onSelectNo,
 }: Props) {
-  const d = motionTheme.invite.rsvp;
-  const ease = motionTheme.ease;
-
-  const appear = {
-    initial: { opacity: 0, y: reducedMotion ? 0 : 14 },
-    animate: { opacity: 1, y: 0 },
-    transition: {
-      delay: reducedMotion ? 0.25 : d,
-      duration: reducedMotion ? 0.3 : motionTheme.duration.medium,
-      ease,
-    },
-  };
+  const ease = motionCfg.ease;
 
   return (
-    <Wrap {...appear}>
-      <ButtonRow role="group" aria-label="RSVP">
+    <Wrap
+      initial={{ opacity: 0, y: reducedMotion ? 0 : 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{
+        duration: reducedMotion
+          ? motionCfg.duration.fast
+          : motionCfg.duration.medium,
+        ease,
+      }}
+    >
+      <ButtonRow role="group" aria-label="Հրավերի պատասխան">
         <Primary
           type="button"
           onClick={onSelectYes}
-          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
-          whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+          whileTap={reducedMotion ? undefined : { scale: 0.99 }}
         >
-          Yes, I will attend
+          Այո, ներկա կլինեմ
         </Primary>
         <Secondary
           type="button"
           onClick={onSelectNo}
-          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
-          whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+          whileTap={reducedMotion ? undefined : { scale: 0.99 }}
         >
-          Sorry, I can’t attend
+          Ցավոք, չեմ կարողանա ներկա լինել
         </Secondary>
       </ButtonRow>
     </Wrap>

@@ -13,14 +13,21 @@ export const GlobalStyle = createGlobalStyle`
 
   html {
     -webkit-text-size-adjust: 100%;
+    height: 100%;
   }
 
   body {
     margin: 0;
-    min-height: 100dvh;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
     background: ${colors.ink};
     color: rgba(245, 240, 230, 0.92);
-    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    font-family:
+      var(--font-arm-sans),
+      "Noto Sans Armenian",
+      system-ui,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
