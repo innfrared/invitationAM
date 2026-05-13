@@ -22,7 +22,7 @@ const armSans = Noto_Sans_Armenian({
 export const metadata: Metadata = {
   title: "Արթուր Մնացականյանի 50-ամյակի հրավեր",
   description:
-    "Խորհրդավոր տոնական հրավեր։ 27 հունիսի, 2026, Արարատ ռեստորան։",
+    "Խորհրդավոր տոնական հրավեր։ 27 հունիսի, 2026, Զանգակ ռեստորան։",
 };
 
 export default function RootLayout({

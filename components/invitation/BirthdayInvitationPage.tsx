@@ -1,29 +1,51 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
-import { useState } from "react";
-import { AnimatedBackground } from "@/components/invitation/AnimatedBackground";
+import { useCallback, useMemo, useState } from "react";
+
 import { BirthdayPersonSection } from "@/components/invitation/BirthdayPersonSection";
 import { DateSection } from "@/components/invitation/DateSection";
-import { FloatingParticles } from "@/components/invitation/FloatingParticles";
+import { GoldParticlesBackground } from "@/components/invitation/GoldParticlesBackground";
 import { HeroSection } from "@/components/invitation/HeroSection";
 import { InvitationRevealSection } from "@/components/invitation/InvitationRevealSection";
 import { LocationSection } from "@/components/invitation/LocationSection";
 import { RSVPSection } from "@/components/invitation/RSVPSection";
+import { invitationSections } from "@/components/invitation/sections";
 import { SnapScrollContainer } from "@/components/invitation/SnapScrollContainer";
+import { StepIndicator } from "@/components/invitation/StepIndicator";
+import { useActiveSection } from "@/components/invitation/useActiveSection";
 
-type Rsvp = "yes" | "no" | null;
+type SelectedResponse = "yes" | "no" | null;
 
 export function BirthdayInvitationPage() {
   const reducedMotion = useReducedMotion();
   const rm = !!reducedMotion;
-  const [rsvp, setRsvp] = useState<Rsvp>(null);
+  const [snapRoot, setSnapRoot] = useState<HTMLElement | null>(null);
+  const captureSnapRoot = useCallback((node: HTMLElement | null) => {
+    setSnapRoot(node);
+  }, []);
+  const sectionIds = useMemo(
+    () => invitationSections.map((s) => s.id),
+    [],
+  );
+  const activeStep = useActiveSection(snapRoot, sectionIds);
+
+  const handleStepClick = useCallback((index: number) => {
+    const id = invitationSections[index]?.id;
+    if (!id) return;
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, []);
+
+  const [selectedResponse, setSelectedResponse] =
+    useState<SelectedResponse>(null);
 
   return (
     <>
-      <AnimatedBackground reducedMotion={rm} />
-      <FloatingParticles reducedMotion={rm} />
-      <SnapScrollContainer>
+      <GoldParticlesBackground reducedMotion={rm} />
+      <SnapScrollContainer ref={captureSnapRoot}>
         <HeroSection reducedMotion={rm} />
         <InvitationRevealSection reducedMotion={rm} />
         <BirthdayPersonSection reducedMotion={rm} />
@@ -31,12 +53,17 @@ export function BirthdayInvitationPage() {
         <LocationSection reducedMotion={rm} />
         <RSVPSection
           reducedMotion={rm}
-          rsvp={rsvp}
-          onSelectYes={() => setRsvp("yes")}
-          onSelectNo={() => setRsvp("no")}
-          onChangeResponse={() => setRsvp(null)}
+          selectedResponse={selectedResponse}
+          onSelectYes={() => setSelectedResponse("yes")}
+          onSelectNo={() => setSelectedResponse("no")}
+          onChangeResponse={() => setSelectedResponse(null)}
         />
       </SnapScrollContainer>
+      <StepIndicator
+        sections={invitationSections}
+        activeStep={activeStep}
+        onStepClick={handleStepClick}
+      />
     </>
   );
 }

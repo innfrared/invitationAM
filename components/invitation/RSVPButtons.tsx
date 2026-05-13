@@ -7,6 +7,8 @@ import { colors, fonts, motion as motionCfg } from "@/lib/theme";
 
 const Wrap = styled(motion.div)`
   width: 100%;
+  max-width: min(94vw, 700px);
+  margin: 0 auto;
 `;
 
 const ButtonRow = styled.div`
@@ -14,29 +16,30 @@ const ButtonRow = styled.div`
   flex-direction: column;
   gap: 1rem;
 
-  @media (min-width: 480px) {
+  @media (min-width: 720px) {
     flex-direction: row;
     justify-content: center;
-    gap: 1.1rem;
+    gap: 1.25rem;
+    align-items: stretch;
   }
 `;
 
 const Primary = styled(motion.button)`
   flex: 1;
-  min-height: 56px;
-  padding: 0.95rem 1.35rem;
+  min-height: 54px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 14px;
+  border-radius: 999px;
   cursor: pointer;
   font-family: ${fonts.sans};
-  font-size: clamp(0.92rem, 2.9vw, 1.02rem);
+  font-size: clamp(1rem, 3.2vw, 1.12rem);
   font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #121016;
+  letter-spacing: 0.04em;
+  color: ${colors.ink};
   background: linear-gradient(
     165deg,
     ${colors.goldLight} 0%,
-    ${colors.gold} 45%,
+    ${colors.gold} 48%,
     ${colors.goldMuted} 100%
   );
   box-shadow:
@@ -51,17 +54,17 @@ const Primary = styled(motion.button)`
 
 const Secondary = styled(motion.button)`
   flex: 1;
-  min-height: 56px;
-  padding: 0.95rem 1.35rem;
-  border-radius: 14px;
+  min-height: 54px;
+  padding: 16px 24px;
+  border-radius: 999px;
   cursor: pointer;
   font-family: ${fonts.sans};
-  font-size: clamp(0.92rem, 2.9vw, 1.02rem);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: rgba(245, 240, 230, 0.9);
-  background: rgba(8, 8, 14, 0.6);
-  border: 1px solid rgba(214, 177, 94, 0.48);
+  font-size: clamp(1rem, 3.2vw, 1.12rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: ${colors.cream};
+  background: rgba(8, 13, 24, 0.55);
+  border: 1px solid rgba(214, 177, 94, 0.52);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
 
   &:focus-visible {
@@ -85,9 +88,9 @@ export function RSVPButtons({
 
   return (
     <Wrap
-      initial={{ opacity: 0, y: reducedMotion ? 0 : 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.35 }}
+      initial={{ opacity: 0, y: reducedMotion ? 0 : 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: reducedMotion ? 0 : -12 }}
       transition={{
         duration: reducedMotion
           ? motionCfg.duration.fast
@@ -95,22 +98,27 @@ export function RSVPButtons({
         ease,
       }}
     >
-      <ButtonRow role="group" aria-label="Հրավերի պատասխան">
+      <ButtonRow
+        role="group"
+        aria-label="Ներկայության պատասխան՝ այո կամ ոչ"
+      >
         <Primary
           type="button"
+          aria-label="Այո, ներկա կլինեմ"
           onClick={onSelectYes}
-          whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
           whileTap={reducedMotion ? undefined : { scale: 0.99 }}
         >
-          Այո, ներկա կլինեմ
+          Այո
         </Primary>
         <Secondary
           type="button"
+          aria-label="Ոչ, չեմ ներկա լինի"
           onClick={onSelectNo}
-          whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+          whileHover={reducedMotion ? undefined : { scale: 1.02 }}
           whileTap={reducedMotion ? undefined : { scale: 0.99 }}
         >
-          Ցավոք, չեմ կարողանա ներկա լինել
+          Ոչ
         </Secondary>
       </ButtonRow>
     </Wrap>

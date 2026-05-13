@@ -3,54 +3,71 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
+import { EmbeddedLocationMap } from "@/components/invitation/EmbeddedLocationMap";
+import {
+  EyebrowDivider,
+  EyebrowLabel,
+  EyebrowStack,
+  SectionSubtitle,
+  SectionTitle,
+} from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
-import { colors, contentMaxWidth, fonts, motion as motionCfg } from "@/lib/theme";
+import {
+  ceremonyChildVariants,
+  staggerParentVariants,
+} from "@/components/invitation/RevealText";
+import {
+  ZANGAK_MAP_IFRAME_TITLE,
+  ZANGAK_MAPS_EXTERNAL_URL,
+  ZANGAK_RESTAURANT_EMBED_URL,
+} from "@/lib/googleMapsEmbed";
+import { contentMaxWidth, motion as motionCfg } from "@/lib/theme";
 
-const Frame = styled(motion.div)`
+const Anchor = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 95% 55% at 50% 100%,
+    rgba(214, 177, 94, 0.14) 0%,
+    rgba(169, 130, 58, 0.06) 38%,
+    transparent 72%
+  );
+`;
+
+const Inner = styled(motion.div)`
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: ${contentMaxWidth};
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2.5rem);
   text-align: center;
-  border-top: 1px solid rgba(214, 177, 94, 0.28);
-  border-bottom: 1px solid rgba(214, 177, 94, 0.28);
-  background: linear-gradient(
-    180deg,
-    rgba(214, 177, 94, 0.04) 0%,
-    transparent 35%,
-    transparent 65%,
-    rgba(214, 177, 94, 0.03) 100%
-  );
-  box-shadow:
-    0 0 60px rgba(214, 177, 94, 0.05),
-    inset 0 0 40px rgba(0, 0, 0, 0.15);
+  padding-top: clamp(0.25rem, 1.5vh, 0.75rem);
+  padding-bottom: clamp(0.25rem, 1.5vh, 0.75rem);
+
+  @media (max-width: 639px) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 `;
 
-const LocationLabel = styled(motion.p)`
-  margin: 0 0 clamp(0.65rem, 2vw, 0.9rem);
-  font-family: ${fonts.sans};
-  font-size: clamp(0.76rem, 2.3vw, 0.86rem);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: ${colors.goldMuted};
+const LocationVenueTitle = styled(SectionTitle)`
+  margin-bottom: clamp(0.45rem, 2vw, 0.75rem);
+
+  @media (max-width: 639px) {
+    margin-bottom: clamp(0.35rem, 1.5vw, 0.55rem);
+  }
 `;
 
-const Venue = styled(motion.p)`
-  margin: 0 0 clamp(1rem, 3vw, 1.35rem);
-  font-family: ${fonts.serif};
-  font-size: clamp(1.85rem, 6.5vw, 3.1rem);
-  font-weight: 600;
-  line-height: 1.15;
-  color: ${colors.cream};
-  text-shadow: 0 0 32px rgba(214, 177, 94, 0.12);
+const LocationSupporting = styled(SectionSubtitle)`
+  margin-bottom: 0;
 `;
 
-const Tagline = styled(motion.p)`
-  margin: 0;
-  font-family: ${fonts.serif};
-  font-size: clamp(0.96rem, 3.1vw, 1.1rem);
-  line-height: 1.55;
-  color: rgba(245, 240, 230, 0.62);
+const MapBlock = styled(motion.div)`
+  width: 100%;
+  max-width: min(86vw, 600px);
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 type Props = {
@@ -58,44 +75,34 @@ type Props = {
 };
 
 export function LocationSection({ reducedMotion }: Props) {
-  const ease = motionCfg.ease;
-  const dur = reducedMotion ? motionCfg.duration.fast : motionCfg.duration.medium;
-
-  const parent = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: reducedMotion ? 0 : 0.16,
-        delayChildren: reducedMotion ? 0 : 0.04,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: reducedMotion ? 0 : 22 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: dur, ease },
-    },
-  };
+  const item = ceremonyChildVariants(reducedMotion);
+  const parent = staggerParentVariants(reducedMotion);
 
   return (
-    <InvitationSection aria-labelledby="location-heading">
-      <Frame
+    <InvitationSection id="location" aria-labelledby="location-heading">
+      <Anchor aria-hidden />
+      <Inner
         variants={parent}
         initial="hidden"
-        whileInView="visible"
+        whileInView="show"
         viewport={{ once: true, amount: motionCfg.scroll.viewportAmount }}
       >
-        <LocationLabel id="location-heading" variants={item}>
-          Վայրը
-        </LocationLabel>
-        <Venue variants={item}>Արարատ ռեստորան</Venue>
-        <Tagline variants={item}>
+        <EyebrowStack variants={item}>
+          <EyebrowLabel id="location-heading">Վայրը</EyebrowLabel>
+          <EyebrowDivider aria-hidden />
+        </EyebrowStack>
+        <LocationVenueTitle variants={item}>Զանգակ ռեստորան</LocationVenueTitle>
+        <LocationSupporting variants={item}>
           Երեկո՝ լի ջերմությամբ, հիշողություններով և ուրախությամբ
-        </Tagline>
-      </Frame>
+        </LocationSupporting>
+        <MapBlock variants={item}>
+          <EmbeddedLocationMap
+            embedUrl={ZANGAK_RESTAURANT_EMBED_URL}
+            externalUrl={ZANGAK_MAPS_EXTERNAL_URL}
+            title={ZANGAK_MAP_IFRAME_TITLE}
+          />
+        </MapBlock>
+      </Inner>
     </InvitationSection>
   );
 }

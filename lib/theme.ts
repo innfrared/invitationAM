@@ -1,14 +1,19 @@
 export const colors = {
+  stageBlack: "#030305",
+  navyDeep: "#080D18",
+  burgundyDeep: "#16050B",
   gold: "#D6B15E",
   goldLight: "#F5D98B",
   goldMuted: "#A9823A",
-  ink: "#0a0a10",
-  navy: "#0c1220",
-  burgundy: "#1a0a12",
-  charcoal: "#12141c",
-  card: "rgba(10, 10, 16, 0.72)",
+  cream: "#F3E8D0",
+  helperMuted: "#CDBF9F",
+  mutedText: "#CDBF9F",
+  ink: "#030305",
+  navy: "#080D18",
+  burgundy: "#16050B",
+  charcoal: "#080D18",
+  card: "rgba(3, 3, 5, 0.72)",
   cardBorder: "rgba(214, 177, 94, 0.35)",
-  cream: "rgba(245, 240, 230, 0.92)",
 } as const;
 
 export const fonts = {
@@ -17,18 +22,18 @@ export const fonts = {
   sans: 'var(--font-arm-sans), "Noto Sans Armenian", system-ui, sans-serif',
 } as const;
 
-export const contentMaxWidth = "min(94vw, 880px)";
+export const contentMaxWidth = "min(94vw, 900px)";
 
 export const motion = {
   duration: {
-    fast: 0.45,
-    medium: 0.7,
-    slow: 0.95,
+    fast: 0.5,
+    medium: 0.75,
+    slow: 1,
   },
   ease: [0.22, 1, 0.36, 1] as const,
   scroll: {
     stagger: 0.14,
-    sectionDuration: 0.8,
-    viewportAmount: 0.45,
+    sectionDuration: 0.85,
+    viewportAmount: 0.6,
   },
 } as const;

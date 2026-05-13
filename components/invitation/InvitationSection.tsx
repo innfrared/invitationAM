@@ -1,8 +1,9 @@
 "use client";
 
+import { forwardRef } from "react";
 import styled from "styled-components";
 
-export const InvitationSection = styled.section`
+const StyledSection = styled.section`
   box-sizing: border-box;
   min-height: 100vh;
   min-height: 100dvh;
@@ -15,3 +16,10 @@ export const InvitationSection = styled.section`
   padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 3rem);
   position: relative;
 `;
+
+export const InvitationSection = forwardRef<
+  HTMLElement,
+  React.ComponentPropsWithoutRef<"section">
+>(function InvitationSection(props, ref) {
+  return <StyledSection ref={ref} {...props} />;
+});

@@ -4,9 +4,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import styled from "styled-components";
 
 import { ConfirmationMessage } from "@/components/invitation/ConfirmationMessage";
+import {
+  RSVPQuestion,
+  SectionSubtitle,
+} from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
 import { RSVPButtons } from "@/components/invitation/RSVPButtons";
-import { colors, contentMaxWidth, fonts, motion as motionCfg } from "@/lib/theme";
+import {
+  ceremonyChildVariants,
+  staggerParentVariants,
+} from "@/components/invitation/RevealText";
+import { contentMaxWidth, motion as motionCfg } from "@/lib/theme";
 
 const Inner = styled.div`
   width: 100%;
@@ -15,21 +23,19 @@ const Inner = styled.div`
   text-align: center;
 `;
 
-const Heading = styled(motion.h2)`
-  margin: 0 0 clamp(2rem, 5vw, 2.75rem);
-  font-family: ${fonts.serif};
-  font-size: clamp(1.6rem, 5.2vw, 2.45rem);
-  font-weight: 600;
-  line-height: 1.25;
-  color: ${colors.cream};
-  text-shadow: 0 0 28px rgba(214, 177, 94, 0.12);
+const StyledRSVPQuestion = styled(RSVPQuestion)`
+  margin-bottom: clamp(1rem, 3.5vw, 1.35rem);
 `;
 
-type Rsvp = "yes" | "no" | null;
+const RSVPHint = styled(SectionSubtitle)`
+  margin-bottom: clamp(1.75rem, 5vw, 2.5rem);
+`;
+
+type SelectedResponse = "yes" | "no" | null;
 
 type Props = {
   reducedMotion: boolean;
-  rsvp: Rsvp;
+  selectedResponse: SelectedResponse;
   onSelectYes: () => void;
   onSelectNo: () => void;
   onChangeResponse: () => void;
@@ -37,47 +43,51 @@ type Props = {
 
 export function RSVPSection({
   reducedMotion,
-  rsvp,
+  selectedResponse,
   onSelectYes,
   onSelectNo,
   onChangeResponse,
 }: Props) {
-  const ease = motionCfg.ease;
+  const item = ceremonyChildVariants(reducedMotion);
+  const parent = staggerParentVariants(reducedMotion);
 
   return (
-    <InvitationSection aria-labelledby="rsvp-heading">
+    <InvitationSection id="rsvp" aria-labelledby="rsvp-heading">
       <Inner>
-        <Heading
-          id="rsvp-heading"
-          initial={{ opacity: 0, y: reducedMotion ? 0 : 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.45 }}
-          transition={{
-            duration: reducedMotion
-              ? motionCfg.duration.fast
-              : motionCfg.duration.medium,
-            ease,
-          }}
+        <motion.div
+          variants={parent}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: motionCfg.scroll.viewportAmount }}
         >
-          Կմիանա՞ք մեզ
-        </Heading>
-        <AnimatePresence mode="wait">
-          {rsvp === null ? (
-            <RSVPButtons
-              key="rsvp"
-              reducedMotion={reducedMotion}
-              onSelectYes={onSelectYes}
-              onSelectNo={onSelectNo}
-            />
-          ) : (
-            <ConfirmationMessage
-              key="confirm"
-              reducedMotion={reducedMotion}
-              answer={rsvp}
-              onChangeResponse={onChangeResponse}
-            />
-          )}
-        </AnimatePresence>
+          <StyledRSVPQuestion id="rsvp-heading" variants={item}>
+            Կմիանա՞ք մեզ
+          </StyledRSVPQuestion>
+          {selectedResponse === null ? (
+            <RSVPHint variants={item}>
+              Խնդրում ենք ընտրել Ձեր պատասխանը
+            </RSVPHint>
+          ) : null}
+          <motion.div variants={item}>
+            <AnimatePresence mode="wait">
+              {selectedResponse === null ? (
+                <RSVPButtons
+                  key="rsvp"
+                  reducedMotion={reducedMotion}
+                  onSelectYes={onSelectYes}
+                  onSelectNo={onSelectNo}
+                />
+              ) : (
+                <ConfirmationMessage
+                  key="confirm"
+                  reducedMotion={reducedMotion}
+                  answer={selectedResponse}
+                  onChangeResponse={onChangeResponse}
+                />
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </motion.div>
       </Inner>
     </InvitationSection>
   );

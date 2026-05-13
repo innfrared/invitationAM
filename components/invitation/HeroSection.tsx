@@ -1,19 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
+import { GoldDivider } from "@/components/invitation/GoldDivider";
+import {
+  EyebrowDivider,
+  EyebrowLabel,
+  EyebrowStack,
+  HelperText,
+  HeroTitle,
+} from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
-import { colors, contentMaxWidth, fonts, motion as motionCfg } from "@/lib/theme";
+import {
+  ceremonyChildVariants,
+  staggerParentVariants,
+} from "@/components/invitation/RevealText";
+import { contentMaxWidth } from "@/lib/theme";
+import { motion as motionCfg } from "@/lib/theme";
 
 const Glow = styled.div`
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 70% 45% at 50% 42%,
-    rgba(214, 177, 94, 0.08) 0%,
-    transparent 65%
+    ellipse 72% 46% at 50% 38%,
+    rgba(214, 177, 94, 0.07) 0%,
+    transparent 68%
   );
 `;
 
@@ -26,72 +39,58 @@ const Content = styled(motion.div)`
   z-index: 1;
 `;
 
-const Label = styled(motion.span)`
-  display: block;
-  margin-bottom: clamp(1.25rem, 4vw, 2rem);
-  font-family: ${fonts.sans};
-  font-size: clamp(0.78rem, 2.6vw, 0.92rem);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  color: ${colors.goldLight};
-  text-shadow: 0 0 24px rgba(214, 177, 94, 0.35);
+const StyledHeroTitle = styled(HeroTitle)`
+  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
 `;
 
-const Greeting = styled(motion.h1)`
-  margin: 0 0 clamp(1.5rem, 4vw, 2.25rem);
-  font-family: ${fonts.serif};
-  font-size: clamp(2.25rem, 9vw, 4.75rem);
-  font-weight: 600;
-  line-height: 1.12;
-  color: ${colors.cream};
-  text-shadow:
-    0 0 40px rgba(214, 177, 94, 0.18),
-    0 2px 32px rgba(0, 0, 0, 0.45);
+const DividerWrap = styled(motion.div)`
+  margin-bottom: clamp(1.35rem, 4vw, 2rem);
 `;
 
-const Hint = styled(motion.p)`
-  margin: 0;
-  font-family: ${fonts.sans};
-  font-size: clamp(0.82rem, 2.6vw, 0.95rem);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  color: rgba(214, 177, 94, 0.6);
+const hintPulse = keyframes`
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(0, 8px, 0);
+    opacity: 1;
+  }
 `;
 
-const OrnamentRow = styled.div`
+const ScrollCue = styled(motion.div)`
+  margin-top: clamp(2.5rem, 8vw, 4rem);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  margin-top: clamp(1.75rem, 5vw, 2.5rem);
+  gap: 0.45rem;
 `;
 
-const OrnamentLine = styled.span`
-  width: min(28vw, 140px);
-  height: 1px;
+const CueLine = styled.span<{ $paused: boolean }>`
+  width: 1px;
+  height: clamp(28px, 7vw, 44px);
   background: linear-gradient(
-    90deg,
-    transparent,
-    ${colors.goldMuted},
-    ${colors.gold},
-    ${colors.goldMuted},
-    transparent
-  );
-  box-shadow: 0 0 8px rgba(214, 177, 94, 0.22);
-`;
-
-const OrnamentGem = styled.span`
-  width: 5px;
-  height: 5px;
-  background: radial-gradient(
-    circle,
-    ${colors.goldLight} 0%,
-    ${colors.gold} 70%,
-    transparent 100%
+    180deg,
+    rgba(245, 217, 139, 0.35),
+    rgba(214, 177, 94, 0.85),
+    rgba(245, 217, 139, 0.28)
   );
   border-radius: 1px;
-  transform: rotate(45deg);
-  box-shadow: 0 0 10px rgba(245, 217, 139, 0.35);
+  box-shadow: 0 0 12px rgba(214, 177, 94, 0.28);
+  animation: ${hintPulse} 2.4s ease-in-out infinite;
+  animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
+`;
+
+const CueDot = styled.span<{ $paused: boolean }>`
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f5d98b, #d6b15e);
+  opacity: 0.9;
+  animation: ${hintPulse} 2.4s ease-in-out infinite;
+  animation-delay: -0.4s;
+  animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
 `;
 
 type Props = {
@@ -99,47 +98,31 @@ type Props = {
 };
 
 export function HeroSection({ reducedMotion }: Props) {
-  const ease = motionCfg.ease;
-  const dur = reducedMotion ? motionCfg.duration.fast : motionCfg.duration.slow;
-
-  const container = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: reducedMotion ? 0 : 0.18,
-        delayChildren: reducedMotion ? 0 : 0.08,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: reducedMotion ? 0 : 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: dur, ease },
-    },
-  };
+  const item = ceremonyChildVariants(reducedMotion);
+  const container = staggerParentVariants(reducedMotion);
 
   return (
-    <InvitationSection aria-label="50-ամյակի ճանապարհորդություն">
+    <InvitationSection id="hero" aria-label="Ողջույն">
       <Glow aria-hidden="true" />
       <Content
         variants={container}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.55 }}
+        whileInView="show"
+        viewport={{ once: true, amount: motionCfg.scroll.viewportAmount }}
       >
-        <Label variants={item}>50-ամյակի տոնական հրավեր</Label>
-        <Greeting variants={item}>Սիրելի՛ ընկեր,</Greeting>
-        <Hint variants={item}>Ոլորեք՝ հրավերը բացելու համար</Hint>
-        <motion.div variants={item}>
-          <OrnamentRow aria-hidden="true">
-            <OrnamentLine />
-            <OrnamentGem />
-            <OrnamentLine />
-          </OrnamentRow>
-        </motion.div>
+        <DividerWrap variants={item}>
+          <GoldDivider />
+        </DividerWrap>
+        <EyebrowStack variants={item}>
+          <EyebrowLabel>50-ամյակի հրավեր</EyebrowLabel>
+          <EyebrowDivider aria-hidden />
+        </EyebrowStack>
+        <StyledHeroTitle variants={item}>Սիրելի՛ ընկեր,</StyledHeroTitle>
+        <HelperText variants={item}>Ոլորեք՝ հրավերը բացելու համար</HelperText>
+        <ScrollCue variants={item} aria-hidden="true">
+          <CueLine $paused={reducedMotion} />
+          <CueDot $paused={reducedMotion} />
+        </ScrollCue>
       </Content>
     </InvitationSection>
   );

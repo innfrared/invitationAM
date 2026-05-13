@@ -10,37 +10,53 @@ const defaultViewport = {
   amount: motionCfg.scroll.viewportAmount,
 } as const;
 
-export function staggerParentVariants(
-  reducedMotion: boolean,
-): Variants {
+export function staggerParentVariants(reducedMotion: boolean): Variants {
   return {
     hidden: {},
     show: {
       transition: {
         staggerChildren: reducedMotion ? 0 : motionCfg.scroll.stagger,
-        delayChildren: reducedMotion ? 0 : 0.06,
+        delayChildren: reducedMotion ? 0 : 0.08,
+      },
+    },
+  };
+}
+
+export function ceremonyChildVariants(reducedMotion: boolean): Variants {
+  if (reducedMotion) {
+    return {
+      hidden: { opacity: 0 },
+      show: {
+        opacity: 1,
+        transition: {
+          duration: motionCfg.duration.fast,
+          ease: motionCfg.ease,
+        },
+      },
+    };
+  }
+  return {
+    hidden: {
+      opacity: 0,
+      y: 24,
+      scale: 0.96,
+      filter: "blur(8px)",
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: motionCfg.scroll.sectionDuration,
+        ease: motionCfg.ease,
       },
     },
   };
 }
 
 export function staggerChildVariants(reducedMotion: boolean): Variants {
-  return {
-    hidden: {
-      opacity: 0,
-      y: reducedMotion ? 0 : 28,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: reducedMotion
-          ? motionCfg.duration.fast
-          : motionCfg.scroll.sectionDuration,
-        ease: motionCfg.ease,
-      },
-    },
-  };
+  return ceremonyChildVariants(reducedMotion);
 }
 
 type RevealGroupProps = {

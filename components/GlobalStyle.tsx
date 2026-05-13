@@ -22,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     max-height: 100%;
     overflow: hidden;
     background: ${colors.ink};
-    color: rgba(245, 240, 230, 0.92);
+    color: ${colors.cream};
     font-family:
       var(--font-arm-sans),
       "Noto Sans Armenian",
