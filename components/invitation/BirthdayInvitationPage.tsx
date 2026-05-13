@@ -1,7 +1,7 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
-import { useCallback, useMemo, useState } from "react";
+import { Suspense, useCallback, useMemo, useState } from "react";
 
 import { BirthdayPersonSection } from "@/components/invitation/BirthdayPersonSection";
 import { DateSection } from "@/components/invitation/DateSection";
@@ -9,13 +9,14 @@ import { GoldParticlesBackground } from "@/components/invitation/GoldParticlesBa
 import { HeroSection } from "@/components/invitation/HeroSection";
 import { InvitationRevealSection } from "@/components/invitation/InvitationRevealSection";
 import { LocationSection } from "@/components/invitation/LocationSection";
-import { RSVPSection } from "@/components/invitation/RSVPSection";
+import {
+  RSVPSection,
+  RSVPSectionFallback,
+} from "@/components/invitation/RSVPSection";
 import { invitationSections } from "@/components/invitation/sections";
 import { SnapScrollContainer } from "@/components/invitation/SnapScrollContainer";
 import { StepIndicator } from "@/components/invitation/StepIndicator";
 import { useActiveSection } from "@/components/invitation/useActiveSection";
-
-type SelectedResponse = "yes" | "no" | null;
 
 export function BirthdayInvitationPage() {
   const reducedMotion = useReducedMotion();
@@ -39,9 +40,6 @@ export function BirthdayInvitationPage() {
     });
   }, []);
 
-  const [selectedResponse, setSelectedResponse] =
-    useState<SelectedResponse>(null);
-
   return (
     <>
       <GoldParticlesBackground reducedMotion={rm} />
@@ -51,13 +49,9 @@ export function BirthdayInvitationPage() {
         <BirthdayPersonSection reducedMotion={rm} />
         <DateSection reducedMotion={rm} />
         <LocationSection reducedMotion={rm} />
-        <RSVPSection
-          reducedMotion={rm}
-          selectedResponse={selectedResponse}
-          onSelectYes={() => setSelectedResponse("yes")}
-          onSelectNo={() => setSelectedResponse("no")}
-          onChangeResponse={() => setSelectedResponse(null)}
-        />
+        <Suspense fallback={<RSVPSectionFallback reducedMotion={rm} />}>
+          <RSVPSection reducedMotion={rm} />
+        </Suspense>
       </SnapScrollContainer>
       <StepIndicator
         sections={invitationSections}

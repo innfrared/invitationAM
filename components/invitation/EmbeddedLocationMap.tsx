@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 
-import { colors, fonts } from "@/lib/theme";
+import { colors, fonts, mapStageMaxWidth } from "@/lib/theme";
 
 export type EmbeddedLocationMapProps = {
   embedUrl: string;
@@ -11,7 +11,7 @@ export type EmbeddedLocationMapProps = {
 };
 
 const Root = styled.div`
-  width: min(86vw, 600px);
+  width: ${mapStageMaxWidth};
   max-width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -30,13 +30,15 @@ const MapCard = styled.div`
   width: 100%;
   margin-top: clamp(18px, 3.5vh, 34px);
   height: clamp(220px, 28vh, 300px);
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
-  border: 1px solid rgba(214, 177, 94, 0.42);
-  background: rgba(8, 8, 12, 0.6);
+  border: 2px solid rgba(245, 217, 139, 0.52);
+  background: rgba(5, 6, 10, 0.72);
   box-shadow:
-    0 0 36px rgba(214, 177, 94, 0.16),
-    0 22px 80px rgba(0, 0, 0, 0.45);
+    0 0 0 1px rgba(214, 177, 94, 0.38),
+    0 0 42px rgba(245, 217, 139, 0.26),
+    0 0 88px rgba(214, 177, 94, 0.14),
+    0 26px 88px rgba(0, 0, 0, 0.52);
 
   &::after {
     content: "";
@@ -44,7 +46,9 @@ const MapCard = styled.div`
     inset: 0;
     border-radius: inherit;
     pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(245, 217, 139, 0.16);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 241, 184, 0.18),
+      inset 0 0 48px rgba(245, 217, 139, 0.06);
     z-index: 1;
   }
 

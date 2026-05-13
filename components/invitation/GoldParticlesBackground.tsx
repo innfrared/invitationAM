@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import { keyframes } from "styled-components";
 import styled from "styled-components";
@@ -15,8 +16,8 @@ function mulberry32(seed: number) {
   };
 }
 
-type ParticleConfig = {
-  id: number;
+type DustParticle = {
+  id: string;
   leftPct: number;
   topPct: number;
   sizePx: number;
@@ -28,22 +29,33 @@ type ParticleConfig = {
   opacityMax: number;
 };
 
-function buildParticles(rand: () => number): ParticleConfig[] {
-  const count = 45 + Math.floor(rand() * 26);
-  const out: ParticleConfig[] = [];
+type BokehParticle = {
+  id: string;
+  leftPct: number;
+  topPct: number;
+  sizePx: number;
+  durationSec: number;
+  delaySec: number;
+};
+
+function buildDust(rand: () => number): DustParticle[] {
+  const count = 56 + Math.floor(rand() * 24);
+  const out: DustParticle[] = [];
   for (let i = 0; i < count; i += 1) {
-    const leftPct = 50 + (rand() - 0.5) * 36;
-    const bottomBand = i > count * 0.82;
-    const topPct = bottomBand ? 80 + rand() * 18 : rand() * 78 + 4;
-    const sizePx = 1 + Math.floor(rand() * 4);
+    const roll = rand();
+    const sizePx =
+      roll < 0.55 ? 1 + Math.floor(rand() * 2) : 3 + Math.floor(rand() * 3);
+    const leftPct = 50 + (rand() - 0.5) * 26;
+    const bottomHeavy = i > count * 0.76;
+    const topPct = bottomHeavy ? 74 + rand() * 24 : rand() * 72 + 3;
     const durationSec = 7 + rand() * 11;
     const delaySec = -(rand() * durationSec);
-    const driftY = 20 + rand() * 60;
-    const driftX = -10 + rand() * 20;
-    const opacityMin = 0.25 + rand() * 0.15;
-    const opacityMax = 0.75 + rand() * 0.15;
+    const driftY = 22 + rand() * 58;
+    const driftX = -12 + rand() * 24;
+    const opacityMin = 0.35 + rand() * 0.12;
+    const opacityMax = 0.82 + rand() * 0.12;
     out.push({
-      id: i,
+      id: `d-${i}`,
       leftPct,
       topPct,
       sizePx,
@@ -53,6 +65,22 @@ function buildParticles(rand: () => number): ParticleConfig[] {
       driftX,
       opacityMin,
       opacityMax,
+    });
+  }
+  return out;
+}
+
+function buildBokeh(rand: () => number): BokehParticle[] {
+  const count = 11 + Math.floor(rand() * 5);
+  const out: BokehParticle[] = [];
+  for (let i = 0; i < count; i += 1) {
+    out.push({
+      id: `b-${i}`,
+      leftPct: 48 + (rand() - 0.5) * 28,
+      topPct: 18 + rand() * 62,
+      sizePx: 8 + Math.floor(rand() * 11),
+      durationSec: 12 + rand() * 10,
+      delaySec: -(rand() * 14),
     });
   }
   return out;
@@ -77,6 +105,18 @@ const dustDrift = keyframes`
   }
 `;
 
+const bokehPulse = keyframes`
+  0%,
+  100% {
+    opacity: 0.32;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translate3d(-50%, -50%, 0) scale(1.06);
+  }
+`;
+
 const Root = styled.div`
   position: fixed;
   inset: 0;
@@ -88,22 +128,49 @@ const Root = styled.div`
 const Base = styled.div`
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    165deg,
-    ${colors.stageBlack} 0%,
-    ${colors.navyDeep} 42%,
-    ${colors.burgundyDeep} 100%
-  );
+  background:
+    radial-gradient(ellipse 140% 100% at 50% -8%, #050508 0%, transparent 42%),
+    linear-gradient(
+      165deg,
+      ${colors.stageBlack} 0%,
+      #060914 38%,
+      ${colors.navyDeep} 48%,
+      ${colors.burgundyDeep} 100%
+    );
 `;
 
 const Spotlight = styled.div`
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse 55% 48% at 50% 0%,
-    rgba(245, 217, 139, 0.14) 0%,
-    rgba(214, 177, 94, 0.06) 28%,
-    transparent 62%
+    ellipse 58% 52% at 50% 0%,
+    rgba(245, 217, 139, 0.28) 0%,
+    rgba(214, 177, 94, 0.14) 26%,
+    rgba(169, 130, 58, 0.05) 48%,
+    transparent 64%
+  );
+`;
+
+const CenterWash = styled.div`
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 56% 58% at 50% 46%,
+    rgba(245, 217, 139, 0.11) 0%,
+    rgba(214, 177, 94, 0.05) 42%,
+    transparent 68%
+  );
+`;
+
+const BottomPool = styled.div`
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 92% 48% at 50% 100%,
+    rgba(214, 177, 94, 0.15) 0%,
+    rgba(169, 130, 58, 0.08) 38%,
+    rgba(22, 8, 14, 0.35) 62%,
+    transparent 78%
   );
 `;
 
@@ -112,38 +179,28 @@ const Vignette = styled.div`
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    transparent 32%,
-    rgba(0, 0, 0, 0.52) 100%
-  );
-`;
-
-const BottomPool = styled.div`
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse 85% 42% at 50% 100%,
-    rgba(214, 177, 94, 0.09) 0%,
-    rgba(169, 130, 58, 0.04) 35%,
-    transparent 70%
+    transparent 22%,
+    rgba(0, 0, 0, 0.38) 55%,
+    rgba(0, 0, 0, 0.68) 100%
   );
 `;
 
 const ShimmerSide = styled.div<{ $side: "left" | "right" }>`
   position: absolute;
-  top: 12%;
-  bottom: 18%;
-  width: 1px;
-  ${(p) => (p.$side === "left" ? "left: 11%;" : "right: 11%;")}
+  top: 10%;
+  bottom: 14%;
+  width: 2px;
+  ${(p) => (p.$side === "left" ? "left: 9%;" : "right: 9%;")}
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(245, 217, 139, 0.07) 22%,
-    rgba(214, 177, 94, 0.05) 50%,
-    rgba(245, 217, 139, 0.06) 78%,
+    rgba(245, 217, 139, 0.14) 18%,
+    rgba(255, 241, 184, 0.18) 48%,
+    rgba(214, 177, 94, 0.12) 82%,
     transparent 100%
   );
-  opacity: 0.85;
-  filter: blur(0.5px);
+  opacity: 0.95;
+  filter: blur(1px);
 `;
 
 const ParticleDot = styled.span<{ $size: number; $paused: boolean }>`
@@ -155,11 +212,13 @@ const ParticleDot = styled.span<{ $size: number; $paused: boolean }>`
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(245, 217, 139, 0.65) 0%,
-    rgba(214, 177, 94, 0.28) 60%,
+    rgba(255, 241, 184, 0.85) 0%,
+    rgba(245, 217, 139, 0.55) 38%,
+    rgba(214, 177, 94, 0.28) 72%,
     transparent 100%
   );
-  box-shadow: 0 0 ${(p) => Math.max(4, p.$size * 2)}px rgba(214, 177, 94, 0.18);
+  box-shadow: 0 0 ${(p) => Math.max(10, p.$size * 2.5)}px
+    rgba(245, 217, 139, 0.45);
   animation-name: ${dustDrift};
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
@@ -168,22 +227,50 @@ const ParticleDot = styled.span<{ $size: number; $paused: boolean }>`
   animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
 `;
 
+const BokehOrb = styled.span<{ $size: number; $paused: boolean }>`
+  position: absolute;
+  width: ${(p) => p.$size}px;
+  height: ${(p) => p.$size}px;
+  margin: 0;
+  border-radius: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  background: radial-gradient(
+    circle,
+    rgba(255, 241, 184, 0.42) 0%,
+    rgba(245, 217, 139, 0.22) 38%,
+    rgba(214, 177, 94, 0.08) 62%,
+    transparent 78%
+  );
+  filter: blur(2px);
+  box-shadow:
+    0 0 28px rgba(245, 217, 139, 0.35),
+    0 0 52px rgba(214, 177, 94, 0.18);
+  animation-name: ${bokehPulse};
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-duration: var(--bdur);
+  animation-delay: var(--bdelay);
+  animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
+`;
+
 type Props = {
   reducedMotion: boolean;
 };
 
 export function GoldParticlesBackground({ reducedMotion }: Props) {
-  const particles = useMemo(() => buildParticles(mulberry32(0x50d501)), []);
+  const dust = useMemo(() => buildDust(mulberry32(0x50d501)), []);
+  const bokeh = useMemo(() => buildBokeh(mulberry32(0x71bb)), []);
 
   return (
     <Root aria-hidden="true">
       <Base />
       <Spotlight />
-      <Vignette />
+      <CenterWash />
       <BottomPool />
+      <Vignette />
       <ShimmerSide $side="left" aria-hidden />
       <ShimmerSide $side="right" aria-hidden />
-      {particles.map((p) => (
+      {dust.map((p) => (
         <ParticleDot
           key={p.id}
           aria-hidden
@@ -199,7 +286,23 @@ export function GoldParticlesBackground({ reducedMotion }: Props) {
               "--o1": p.opacityMax,
               "--dur": `${p.durationSec}s`,
               "--delay": `${p.delaySec}s`,
-            } as React.CSSProperties
+            } as CSSProperties
+          }
+        />
+      ))}
+      {bokeh.map((p) => (
+        <BokehOrb
+          key={p.id}
+          aria-hidden
+          $size={p.sizePx}
+          $paused={reducedMotion}
+          style={
+            {
+              left: `${p.leftPct}%`,
+              top: `${p.topPct}%`,
+              "--bdur": `${p.durationSec}s`,
+              "--bdelay": `${p.delaySec}s`,
+            } as CSSProperties
           }
         />
       ))}

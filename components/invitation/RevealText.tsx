@@ -16,7 +16,7 @@ export function staggerParentVariants(reducedMotion: boolean): Variants {
     show: {
       transition: {
         staggerChildren: reducedMotion ? 0 : motionCfg.scroll.stagger,
-        delayChildren: reducedMotion ? 0 : 0.08,
+        delayChildren: reducedMotion ? 0 : 0.12,
       },
     },
   };
@@ -38,9 +38,9 @@ export function ceremonyChildVariants(reducedMotion: boolean): Variants {
   return {
     hidden: {
       opacity: 0,
-      y: 24,
-      scale: 0.96,
-      filter: "blur(8px)",
+      y: 42,
+      scale: 0.94,
+      filter: "blur(10px)",
     },
     show: {
       opacity: 1,

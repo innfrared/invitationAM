@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
+import { GoldDivider } from "@/components/invitation/GoldDivider";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
 import {
   SectionSubtitle,
@@ -21,7 +23,16 @@ const Inner = styled.div`
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
-  margin-bottom: clamp(0.85rem, 3vw, 1.35rem);
+  margin-bottom: clamp(0.35rem, 1.6vw, 0.65rem);
+`;
+
+const DividerWrap = styled(motion.div)`
+  margin-top: 0;
+  margin-bottom: clamp(0.15rem, 1vw, 0.35rem);
+`;
+
+const StyledSubtitle = styled(SectionSubtitle)`
+  margin-top: clamp(0.25rem, 1.2vw, 0.55rem);
 `;
 
 type Props = {
@@ -38,9 +49,12 @@ export function InvitationRevealSection({ reducedMotion }: Props) {
           <StyledSectionTitle variants={v}>
             Սիրով հրավիրում ենք Ձեզ
           </StyledSectionTitle>
-          <SectionSubtitle variants={v}>
+          <DividerWrap variants={v}>
+            <GoldDivider />
+          </DividerWrap>
+          <StyledSubtitle variants={v}>
             մասնակցելու գեղեցիկ և հիշարժան երեկոյի
-          </SectionSubtitle>
+          </StyledSubtitle>
         </RevealGroup>
       </Inner>
     </InvitationSection>

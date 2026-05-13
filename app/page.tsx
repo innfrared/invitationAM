@@ -1,5 +1,5 @@
-import { BirthdayInvitationPage } from "@/components/invitation/BirthdayInvitationPage";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <BirthdayInvitationPage />;
+  redirect("/invite");
 }

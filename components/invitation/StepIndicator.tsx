@@ -12,7 +12,7 @@ const Wrap = styled.nav`
   pointer-events: none;
 
   @media (min-width: 400px) {
-    right: clamp(0.75rem, 3vw, 1.75rem);
+    right: clamp(1rem, 3.6vw, 2rem);
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -23,7 +23,7 @@ const Wrap = styled.nav`
 
   @media (max-width: 399px) {
     left: 50%;
-    bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+    bottom: max(1rem, calc(env(safe-area-inset-bottom, 0px) + 10px));
     transform: translateX(-50%);
     display: flex;
     flex-direction: row;
@@ -37,26 +37,28 @@ const Connector = styled.div`
 
   @media (min-width: 400px) {
     width: 1px;
-    height: 12px;
+    height: 14px;
     background: linear-gradient(
       180deg,
       transparent,
+      rgba(245, 217, 139, 0.38),
       rgba(214, 177, 94, 0.22),
       transparent
     );
-    opacity: 0.75;
+    opacity: 0.92;
   }
 
   @media (max-width: 399px) {
-    width: 12px;
+    width: 14px;
     height: 1px;
     background: linear-gradient(
       90deg,
       transparent,
+      rgba(245, 217, 139, 0.38),
       rgba(214, 177, 94, 0.22),
       transparent
     );
-    opacity: 0.75;
+    opacity: 0.92;
   }
 `;
 
@@ -70,13 +72,13 @@ const Dot = styled.button<{ $state: "past" | "current" | "upcoming" }>`
   background: transparent;
   display: grid;
   place-items: center;
-  width: ${(p) => (p.$state === "current" ? "12px" : "8px")};
-  height: ${(p) => (p.$state === "current" ? "12px" : "8px")};
+  width: ${(p) => (p.$state === "current" ? "14px" : "9px")};
+  height: ${(p) => (p.$state === "current" ? "14px" : "9px")};
 
   &::after {
     content: "";
-    width: ${(p) => (p.$state === "current" ? "10px" : "6px")};
-    height: ${(p) => (p.$state === "current" ? "10px" : "6px")};
+    width: ${(p) => (p.$state === "current" ? "12px" : "7px")};
+    height: ${(p) => (p.$state === "current" ? "12px" : "7px")};
     border-radius: 50%;
     background: ${(p) =>
       p.$state === "current"
@@ -86,11 +88,11 @@ const Dot = styled.button<{ $state: "past" | "current" | "upcoming" }>`
           : `radial-gradient(circle, rgba(245, 217, 139, 0.35) 0%, rgba(169, 130, 58, 0.22) 100%)`};
     box-shadow: ${(p) =>
       p.$state === "current"
-        ? `0 0 14px rgba(245, 217, 139, 0.55), 0 0 28px rgba(214, 177, 94, 0.25)`
+        ? `0 0 18px rgba(245, 217, 139, 0.75), 0 0 36px rgba(214, 177, 94, 0.38)`
         : p.$state === "past"
-          ? `0 0 6px rgba(214, 177, 94, 0.25)`
-          : `none`};
-    opacity: ${(p) => (p.$state === "upcoming" ? 0.55 : 1)};
+          ? `0 0 10px rgba(214, 177, 94, 0.32)`
+          : `0 0 8px rgba(245, 217, 139, 0.18)`};
+    opacity: ${(p) => (p.$state === "upcoming" ? 0.62 : 1)};
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 

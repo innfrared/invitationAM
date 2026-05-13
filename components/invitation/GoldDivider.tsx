@@ -5,21 +5,20 @@ import styled from "styled-components";
 import { colors } from "@/lib/theme";
 
 const Line = styled.div`
-  width: clamp(160px, 22vw, 260px);
+  width: clamp(120px, 30vw, 280px);
   height: 1px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: clamp(18px, 3vh, 24px) auto;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(214, 177, 94, 0.15) 12%,
-    ${colors.goldMuted} 42%,
-    ${colors.goldLight} 50%,
-    ${colors.goldMuted} 58%,
-    rgba(214, 177, 94, 0.15) 88%,
+    rgba(245, 217, 139, 0.35) 15%,
+    #f5d98b 50%,
+    rgba(245, 217, 139, 0.35) 85%,
     transparent 100%
   );
-  box-shadow: 0 0 12px rgba(214, 177, 94, 0.15);
+  box-shadow:
+    0 0 16px rgba(245, 217, 139, 0.35),
+    0 0 28px rgba(214, 177, 94, 0.18);
   position: relative;
 `;
 
@@ -27,17 +26,19 @@ const Gem = styled.span`
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   transform: translate(-50%, -50%) rotate(45deg);
   border-radius: 1px;
   background: radial-gradient(
     circle,
-    ${colors.goldLight} 0%,
-    ${colors.gold} 70%,
-    transparent 100%
+    #fff1b8 0%,
+    ${colors.goldLight} 45%,
+    ${colors.gold} 100%
   );
-  box-shadow: 0 0 10px rgba(245, 217, 139, 0.35);
+  box-shadow:
+    0 0 14px rgba(245, 217, 139, 0.65),
+    0 0 22px rgba(214, 177, 94, 0.35);
 `;
 
 type Props = {

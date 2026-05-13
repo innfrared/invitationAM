@@ -21,18 +21,27 @@ import {
   ZANGAK_MAPS_EXTERNAL_URL,
   ZANGAK_RESTAURANT_EMBED_URL,
 } from "@/lib/googleMapsEmbed";
-import { contentMaxWidth, motion as motionCfg } from "@/lib/theme";
+import {
+  contentMaxWidth,
+  mapStageMaxWidth,
+  motion as motionCfg,
+} from "@/lib/theme";
 
 const Anchor = styled.div`
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: radial-gradient(
-    ellipse 95% 55% at 50% 100%,
-    rgba(214, 177, 94, 0.14) 0%,
-    rgba(169, 130, 58, 0.06) 38%,
-    transparent 72%
-  );
+      ellipse 92% 58% at 50% 92%,
+      rgba(245, 217, 139, 0.12) 0%,
+      rgba(214, 177, 94, 0.07) 38%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 78% 46% at 50% 42%,
+      rgba(214, 177, 94, 0.06) 0%,
+      transparent 68%
+    );
 `;
 
 const Inner = styled(motion.div)`
@@ -53,6 +62,7 @@ const Inner = styled(motion.div)`
 
 const LocationVenueTitle = styled(SectionTitle)`
   margin-bottom: clamp(0.45rem, 2vw, 0.75rem);
+  font-size: clamp(3rem, 11vw, 6.65rem);
 
   @media (max-width: 639px) {
     margin-bottom: clamp(0.35rem, 1.5vw, 0.55rem);
@@ -65,7 +75,7 @@ const LocationSupporting = styled(SectionSubtitle)`
 
 const MapBlock = styled(motion.div)`
   width: 100%;
-  max-width: min(86vw, 600px);
+  max-width: ${mapStageMaxWidth};
   margin-left: auto;
   margin-right: auto;
 `;
@@ -93,7 +103,9 @@ export function LocationSection({ reducedMotion }: Props) {
         </EyebrowStack>
         <LocationVenueTitle variants={item}>Զանգակ ռեստորան</LocationVenueTitle>
         <LocationSupporting variants={item}>
-          Երեկո՝ լի ջերմությամբ, հիշողություններով և ուրախությամբ
+          Երեկո՝ լի ջերմությամբ,
+          <br />
+          հիշողություններով և ուրախությամբ
         </LocationSupporting>
         <MapBlock variants={item}>
           <EmbeddedLocationMap

@@ -4,18 +4,27 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 import { SectionSubtitleStatic } from "@/components/invitation/InvitationTypography";
-import { colors, fonts, motion as motionCfg } from "@/lib/theme";
+import { RSVP_PERSISTED_HINT } from "@/lib/rsvp/messages";
+import { colors, contentMaxWidth, fonts, motion as motionCfg } from "@/lib/theme";
 
 const Glow = styled.div`
   margin-top: clamp(0.5rem, 2vw, 1rem);
   padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1rem, 4vw, 1.5rem);
   border-radius: 1.25rem;
+  max-width: ${contentMaxWidth};
+  margin-left: auto;
+  margin-right: auto;
   background: radial-gradient(
     ellipse at 50% 40%,
-    rgba(214, 177, 94, 0.14) 0%,
-    rgba(22, 16, 40, 0.35) 52%,
-    transparent 85%
+    rgba(245, 217, 139, 0.16) 0%,
+    rgba(214, 177, 94, 0.08) 48%,
+    rgba(22, 16, 40, 0.38) 72%,
+    transparent 92%
   );
+  border: 1px solid rgba(245, 217, 139, 0.22);
+  box-shadow:
+    0 0 36px rgba(245, 217, 139, 0.14),
+    0 18px 56px rgba(0, 0, 0, 0.38);
   text-align: center;
 `;
 
@@ -24,31 +33,18 @@ const Wrap = styled(motion.div)`
 `;
 
 const Message = styled(SectionSubtitleStatic)`
-  margin: 0 auto 1rem;
+  margin: 0 auto;
 `;
 
-const ChangeBtn = styled.button`
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
+const PersistedHint = styled.p`
+  margin: clamp(0.85rem, 2.5vw, 1.1rem) auto 0;
+  max-width: ${contentMaxWidth};
   font-family: ${fonts.sans};
-  font-size: clamp(0.85rem, 2.6vw, 0.95rem);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: ${colors.gold};
-  text-decoration: underline;
-  text-underline-offset: 4px;
-
-  &:hover {
-    color: ${colors.goldLight};
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${colors.gold};
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
+  font-size: clamp(0.88rem, 2.8vw, 1rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: ${colors.helperMuted};
+  opacity: 0.88;
 `;
 
 type Answer = "yes" | "no";
@@ -56,18 +52,18 @@ type Answer = "yes" | "no";
 type Props = {
   reducedMotion: boolean;
   answer: Answer;
-  onChangeResponse: () => void;
+  showPersistedHint?: boolean;
 };
 
 const copy: Record<Answer, string> = {
   yes: "Շնորհակալություն։ Ուրախ կլինենք Ձեզ տեսնել այս հատուկ երեկոյին։",
-  no: "Շնորհակալություն պատասխանի համար։",
+  no: "Շնորհակալություն պատասխանի համար։ Դուք մեզ շատ կպակասեք։",
 };
 
 export function ConfirmationMessage({
   reducedMotion,
   answer,
-  onChangeResponse,
+  showPersistedHint = false,
 }: Props) {
   const ease = motionCfg.ease;
 
@@ -86,9 +82,9 @@ export function ConfirmationMessage({
     >
       <Glow>
         <Message>{copy[answer]}</Message>
-        <ChangeBtn type="button" onClick={onChangeResponse}>
-          Փոխել պատասխանը
-        </ChangeBtn>
+        {showPersistedHint ? (
+          <PersistedHint>{RSVP_PERSISTED_HINT}</PersistedHint>
+        ) : null}
       </Glow>
     </Wrap>
   );

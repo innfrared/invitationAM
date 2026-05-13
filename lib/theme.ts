@@ -22,18 +22,20 @@ export const fonts = {
   sans: 'var(--font-arm-sans), "Noto Sans Armenian", system-ui, sans-serif',
 } as const;
 
-export const contentMaxWidth = "min(94vw, 900px)";
+export const contentMaxWidth = "min(82vw, 860px)";
+
+export const mapStageMaxWidth = "min(74vw, 500px)";
 
 export const motion = {
   duration: {
     fast: 0.5,
-    medium: 0.75,
-    slow: 1,
+    medium: 0.82,
+    slow: 1.08,
   },
   ease: [0.22, 1, 0.36, 1] as const,
   scroll: {
-    stagger: 0.14,
-    sectionDuration: 0.85,
+    stagger: 0.18,
+    sectionDuration: 1.02,
     viewportAmount: 0.6,
   },
 } as const;

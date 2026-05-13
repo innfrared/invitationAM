@@ -13,7 +13,12 @@ const StyledSection = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(1.5rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 3rem);
+  padding-top: clamp(1.5rem, 5vw, 3.5rem);
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  padding-bottom: max(
+    clamp(3.5rem, 14vmin, 9rem),
+    calc(env(safe-area-inset-bottom, 0px) + clamp(2.75rem, 10vmin, 6rem))
+  );
   position: relative;
 `;
 
