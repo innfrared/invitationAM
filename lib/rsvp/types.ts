@@ -15,6 +15,8 @@ export type StoredRSVPResponses = {
 export type RSVPRequestBody = {
   group: RSVPGroup;
   response: RSVPAnswer;
+  /** When set, moves one vote from previous → response (aggregates stay consistent). */
+  previousResponse?: RSVPAnswer;
 };
 
 export type RSVPCounterRow = {

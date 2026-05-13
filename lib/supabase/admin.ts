@@ -1,13 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 
-/** Server-only. Do not import from `"use client"` modules. */
-export function createSupabaseAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceRole) {
-    throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
+export function createSupabaseServerClient() {
+  const url = (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim();
+  const publishableKey = (process.env.SUPABASE_PUBLISHABLE_KEY ?? "").trim();
+
+  if (!url || !publishableKey) {
+    const missing: string[] = [];
+    if (!url) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+    if (!publishableKey) missing.push("SUPABASE_PUBLISHABLE_KEY");
+    throw new Error(
+      `Missing Supabase env: ${missing.join(", ")}. Add them to .env.local and restart the dev server.`,
+    );
   }
-  return createClient(url, serviceRole, {
+
+  return createClient(url, publishableKey, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

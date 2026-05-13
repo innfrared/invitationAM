@@ -16,7 +16,7 @@ import {
   ceremonyChildVariants,
   staggerParentVariants,
 } from "@/components/invitation/RevealText";
-import { RSVP_SAVE_ERROR } from "@/lib/rsvp/messages";
+import { RSVP_CHOOSE_NEW_HINT, RSVP_SAVE_ERROR } from "@/lib/rsvp/messages";
 import { resolveRSVPGroup } from "@/lib/rsvp/resolveGroup";
 import {
   getStoredResponseForGroup,
@@ -116,10 +116,12 @@ function RSVPSectionContent({
   });
   const [isSaving, setIsSaving] = useState(false);
   const [savingChoice, setSavingChoice] = useState<RSVPAnswer | null>(null);
+  const [changingMind, setChangingMind] = useState(false);
 
   useEffect(() => {
     const existing = getStoredResponseForGroup(group);
     /* eslint-disable react-hooks/set-state-in-effect -- hydrate client-only localStorage (avoid SSR mismatch) */
+    setChangingMind(false);
     setForm({
       selectedResponse: existing,
       hydratedFromStorage: Boolean(existing),
@@ -132,11 +134,12 @@ function RSVPSectionContent({
     async (response: RSVPAnswer) => {
       setForm((s) => ({ ...s, error: null }));
 
-      const existingNow = getStoredResponseForGroup(group);
-      if (existingNow) {
+      const stored = getStoredResponseForGroup(group);
+      if (stored === response) {
+        setChangingMind(false);
         setForm({
-          selectedResponse: existingNow,
-          hydratedFromStorage: true,
+          selectedResponse: response,
+          hydratedFromStorage: Boolean(stored),
           error: null,
         });
         return;
@@ -146,10 +149,15 @@ function RSVPSectionContent({
       setSavingChoice(response);
 
       try {
+        const body =
+          stored != null && stored !== response
+            ? { group, response, previousResponse: stored }
+            : { group, response };
+
         const res = await fetch("/api/rsvp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ group, response }),
+          body: JSON.stringify(body),
         });
 
         let data: { ok?: boolean } = {};
@@ -166,9 +174,11 @@ function RSVPSectionContent({
         }
 
         saveStoredResponseForGroup(group, response);
+        const switched = stored != null && stored !== response;
+        setChangingMind(false);
         setForm({
           selectedResponse: response,
-          hydratedFromStorage: false,
+          hydratedFromStorage: switched,
           error: null,
         });
       } catch {
@@ -203,7 +213,7 @@ function RSVPSectionContent({
           </StyledRSVPQuestion>
           {selectedResponse === null ? (
             <RSVPHint variants={item}>
-              Խնդրում ենք ընտրել Ձեր պատասխանը
+              {changingMind ? RSVP_CHOOSE_NEW_HINT : "Խնդրում ենք ընտրել Ձեր պատասխանը"}
             </RSVPHint>
           ) : null}
           <AnimatePresence>
@@ -239,7 +249,15 @@ function RSVPSectionContent({
                   key="confirm"
                   reducedMotion={reducedMotion}
                   answer={selectedResponse}
-                  showPersistedHint={hydratedFromStorage}
+                  showPersistedHint={hydratedFromStorage && !changingMind}
+                  onChangeMind={() => {
+                    setChangingMind(true);
+                    setForm((s) => ({
+                      ...s,
+                      selectedResponse: null,
+                      error: null,
+                    }));
+                  }}
                 />
               )}
             </AnimatePresence>

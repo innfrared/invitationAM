@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 
 import type { RSVPStatsBody } from "@/lib/rsvp/types";
-import { createSupabaseAdmin } from "@/lib/supabase/admin";
+import { createSupabaseServerClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const supabase = createSupabaseAdmin();
+    const supabase = createSupabaseServerClient();
     const { data, error } = await supabase
       .from("rsvp_counters")
       .select("group_key, yes_count, no_count");
