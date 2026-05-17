@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Armenian, Noto_Serif_Armenian } from "next/font/google";
 
+import { getMetadataBase, siteMetadata } from "@/lib/site-metadata";
+
 import { StyledComponentsRegistry } from "./registry";
 
 const armSerif = Noto_Serif_Armenian({
@@ -20,7 +22,8 @@ const armSans = Noto_Sans_Armenian({
 });
 
 export const metadata: Metadata = {
-  title: "Հրավեր",
+  metadataBase: getMetadataBase(),
+  ...siteMetadata,
 };
 
 export default function RootLayout({
