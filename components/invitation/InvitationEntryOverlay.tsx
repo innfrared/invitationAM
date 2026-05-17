@@ -90,7 +90,7 @@ export function InvitationEntryOverlay({ reducedMotion, onOpen }: Props) {
 
   return (
     <Overlay role="button" tabIndex={-1} aria-label="Բացել հրավերը">
-      <Title>Բացե՞լ հրավերը</Title>
+      <Title>Բացել հրավերը</Title>
       <EntryArrow
         $paused={reducedMotion}
         viewBox="0 0 24 48"
