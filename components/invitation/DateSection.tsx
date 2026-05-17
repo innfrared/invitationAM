@@ -88,7 +88,6 @@ export function DateSection({ reducedMotion }: Props) {
             <br />
             տեղի կունենա
           </EyebrowLabel>
-          <EyebrowDivider aria-hidden />
         </EyebrowStack>
         <RuleAbove variants={item}>
           <GoldDivider />

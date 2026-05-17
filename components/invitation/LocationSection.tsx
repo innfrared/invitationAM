@@ -8,7 +8,6 @@ import {
   EyebrowDivider,
   EyebrowLabel,
   EyebrowStack,
-  SectionSubtitle,
   SectionTitle,
 } from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
@@ -69,10 +68,6 @@ const LocationVenueTitle = styled(SectionTitle)`
   }
 `;
 
-const LocationSupporting = styled(SectionSubtitle)`
-  margin-bottom: 0;
-`;
-
 const MapBlock = styled(motion.div)`
   width: 100%;
   max-width: ${mapStageMaxWidth};
@@ -102,11 +97,6 @@ export function LocationSection({ reducedMotion }: Props) {
           <EyebrowDivider aria-hidden />
         </EyebrowStack>
         <LocationVenueTitle variants={item}>Զանգակ ռեստորան</LocationVenueTitle>
-        <LocationSupporting variants={item}>
-          Երեկո՝ լի ջերմությամբ,
-          <br />
-          հիշողություններով և ուրախությամբ
-        </LocationSupporting>
         <MapBlock variants={item}>
           <EmbeddedLocationMap
             embedUrl={ZANGAK_RESTAURANT_EMBED_URL}

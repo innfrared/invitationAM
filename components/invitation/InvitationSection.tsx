@@ -3,6 +3,8 @@
 import { forwardRef } from "react";
 import styled from "styled-components";
 
+import { SectionScrollCue } from "@/components/invitation/SectionScrollCue";
+
 const StyledSection = styled.section`
   box-sizing: border-box;
   min-height: 100vh;
@@ -22,9 +24,17 @@ const StyledSection = styled.section`
   position: relative;
 `;
 
-export const InvitationSection = forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<"section">
->(function InvitationSection(props, ref) {
-  return <StyledSection ref={ref} {...props} />;
-});
+type InvitationSectionProps = React.ComponentPropsWithoutRef<"section"> & {
+  hideScrollCue?: boolean;
+};
+
+export const InvitationSection = forwardRef<HTMLElement, InvitationSectionProps>(
+  function InvitationSection({ children, hideScrollCue = false, ...props }, ref) {
+    return (
+      <StyledSection ref={ref} {...props}>
+        {children}
+        {!hideScrollCue ? <SectionScrollCue /> : null}
+      </StyledSection>
+    );
+  },
+);

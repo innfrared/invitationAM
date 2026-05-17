@@ -5,13 +5,7 @@ import { motion } from "framer-motion";
 import styled, { keyframes } from "styled-components";
 
 import { GoldDivider } from "@/components/invitation/GoldDivider";
-import {
-  EyebrowDivider,
-  EyebrowLabel,
-  EyebrowStack,
-  HelperText,
-  HeroTitle,
-} from "@/components/invitation/InvitationTypography";
+import { HeroTitle } from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
 import {
   ceremonyChildVariants,
@@ -37,18 +31,6 @@ const Glow = styled.div`
     );
 `;
 
-const hintPulse = keyframes`
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.62;
-  }
-  50% {
-    transform: translate3d(0, 10px, 0);
-    opacity: 1;
-  }
-`;
-
 const goldTitleShimmerOnce = keyframes`
   0% {
     text-shadow:
@@ -67,11 +49,24 @@ const goldTitleShimmerOnce = keyframes`
   }
 `;
 
+const HeroSectionRoot = styled(InvitationSection)`
+  justify-content: center;
+  padding-top: max(
+    clamp(1.25rem, 4vw, 2.5rem),
+    env(safe-area-inset-top, 0px)
+  );
+`;
+
 const Content = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: ${contentMaxWidth};
   margin: 0 auto;
   text-align: center;
+  gap: clamp(1.15rem, 3.2vw, 1.85rem);
   position: relative;
   z-index: 1;
 `;
@@ -79,7 +74,12 @@ const Content = styled(motion.div)`
 const StyledHeroTitle = styled(HeroTitle).withConfig({
   shouldForwardProp: (prop) => prop !== "$playShimmer",
 })<{ $playShimmer: boolean }>`
-  margin-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  max-width: ${contentMaxWidth};
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
+  line-height: 1.48;
+  margin-bottom: 0;
   animation-name: ${goldTitleShimmerOnce};
   animation-duration: 1.08s;
   animation-timing-function: ease-out;
@@ -89,47 +89,8 @@ const StyledHeroTitle = styled(HeroTitle).withConfig({
 `;
 
 const DividerWrap = styled(motion.div)`
-  margin-bottom: clamp(1.35rem, 4vw, 2rem);
-`;
-
-const ScrollCue = styled(motion.div)`
-  margin-top: clamp(2.5rem, 8vw, 4rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-`;
-
-const CueLine = styled.span<{ $paused: boolean }>`
-  width: 2px;
-  height: clamp(32px, 8vw, 52px);
-  background: linear-gradient(
-    180deg,
-    rgba(245, 217, 139, 0.45),
-    rgba(255, 241, 184, 0.92),
-    rgba(214, 177, 94, 0.85),
-    rgba(245, 217, 139, 0.35)
-  );
-  border-radius: 1px;
-  box-shadow:
-    0 0 16px rgba(245, 217, 139, 0.42),
-    0 0 32px rgba(214, 177, 94, 0.22);
-  animation: ${hintPulse} 2.4s ease-in-out infinite;
-  animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
-`;
-
-const CueDot = styled.span<{ $paused: boolean }>`
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff1b8, #f5d98b 42%, #d6b15e);
-  opacity: 0.96;
-  box-shadow:
-    0 0 14px rgba(245, 217, 139, 0.55),
-    0 0 26px rgba(214, 177, 94, 0.28);
-  animation: ${hintPulse} 2.4s ease-in-out infinite;
-  animation-delay: -0.4s;
-  animation-play-state: ${(p) => (p.$paused ? "paused" : "running")};
+  margin: 0;
+  width: 100%;
 `;
 
 type Props = {
@@ -142,7 +103,7 @@ export function HeroSection({ reducedMotion }: Props) {
   const [heroShimmer, setHeroShimmer] = useState(false);
 
   return (
-    <InvitationSection id="hero" aria-label="Ողջույն">
+    <HeroSectionRoot id="hero" aria-label="Ողջույն">
       <Glow aria-hidden="true" />
       <Content
         variants={container}
@@ -153,10 +114,6 @@ export function HeroSection({ reducedMotion }: Props) {
         <DividerWrap variants={item}>
           <GoldDivider />
         </DividerWrap>
-        <EyebrowStack variants={item}>
-          <EyebrowLabel>50-ամյակի հրավեր</EyebrowLabel>
-          <EyebrowDivider aria-hidden />
-        </EyebrowStack>
         <StyledHeroTitle
           variants={item}
           $playShimmer={!reducedMotion && heroShimmer}
@@ -166,14 +123,12 @@ export function HeroSection({ reducedMotion }: Props) {
             }
           }}
         >
-          Սիրելի՛ ընկեր,
+          Հետևում թողնելով <br />50 տարվա կենսագրություն`<br />նոր էջ եմ բացում,<br />որտեղ ամենագեղեցիկ<br />հիշողությունները դեռ<br />գրվելու են...
         </StyledHeroTitle>
-        <HelperText variants={item}>Ոլորեք՝ հրավերը բացելու համար</HelperText>
-        <ScrollCue variants={item} aria-hidden="true">
-          <CueLine $paused={reducedMotion} />
-          <CueDot $paused={reducedMotion} />
-        </ScrollCue>
+        <DividerWrap variants={item}>
+          <GoldDivider />
+        </DividerWrap>
       </Content>
-    </InvitationSection>
+    </HeroSectionRoot>
   );
 }

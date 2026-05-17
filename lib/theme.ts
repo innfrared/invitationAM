@@ -17,9 +17,8 @@ export const colors = {
 } as const;
 
 export const fonts = {
-  serif:
-    'var(--font-arm-serif), "Noto Serif Armenian", "Times New Roman", serif',
-  sans: 'var(--font-arm-sans), "Noto Sans Armenian", system-ui, sans-serif',
+  serif: 'var(--font-arm-serif), "Noto Serif Armenian", serif',
+  sans: 'var(--font-arm-sans), "Noto Sans Armenian", sans-serif',
 } as const;
 
 export const contentMaxWidth = "min(82vw, 860px)";

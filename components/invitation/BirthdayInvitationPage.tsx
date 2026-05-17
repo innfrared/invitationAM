@@ -5,6 +5,7 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 
 import { BirthdayPersonSection } from "@/components/invitation/BirthdayPersonSection";
 import { DateSection } from "@/components/invitation/DateSection";
+import { InvitationBackgroundMusic } from "@/components/invitation/InvitationBackgroundMusic";
 import { GoldParticlesBackground } from "@/components/invitation/GoldParticlesBackground";
 import { HeroSection } from "@/components/invitation/HeroSection";
 import { InvitationRevealSection } from "@/components/invitation/InvitationRevealSection";
@@ -42,6 +43,7 @@ export function BirthdayInvitationPage() {
 
   return (
     <>
+      <InvitationBackgroundMusic />
       <GoldParticlesBackground reducedMotion={rm} />
       <SnapScrollContainer ref={captureSnapRoot}>
         <HeroSection reducedMotion={rm} />

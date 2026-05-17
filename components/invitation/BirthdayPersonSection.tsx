@@ -10,6 +10,7 @@ import {
   EyebrowDivider,
   EyebrowLabel,
   EyebrowStack,
+  SectionSubtitle,
 } from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
 import {
@@ -97,6 +98,12 @@ const BottomRule = styled(motion.div)`
   margin-top: clamp(1.25rem, 4vw, 2rem);
 `;
 
+const EveningTagline = styled(SectionSubtitle)`
+  font-size: clamp(1.2rem, 4.2vw, 1.75rem);
+  margin-top: clamp(0.85rem, 2.6vw, 1.25rem);
+  margin-bottom: 0;
+`;
+
 type Props = {
   reducedMotion: boolean;
 };
@@ -128,6 +135,11 @@ export function BirthdayPersonSection({ reducedMotion }: Props) {
           <BottomRule variants={item}>
             <GoldDivider />
           </BottomRule>
+          <EveningTagline variants={item}>
+            Երեկո՝ լի ջերմությամբ,
+            <br />
+            հիշողություններով և ուրախությամբ
+          </EveningTagline>
         </Inner>
       </Stage>
     </InvitationSection>

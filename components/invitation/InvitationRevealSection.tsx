@@ -23,6 +23,11 @@ const Inner = styled.div`
 `;
 
 const StyledSectionTitle = styled(SectionTitle)`
+  max-width: ${contentMaxWidth};
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
+  line-height: 1.48;
   margin-bottom: clamp(0.35rem, 1.6vw, 0.65rem);
 `;
 
@@ -32,6 +37,7 @@ const DividerWrap = styled(motion.div)`
 `;
 
 const StyledSubtitle = styled(SectionSubtitle)`
+  font-size: clamp(1.2rem, 4.2vw, 1.75rem);
   margin-top: clamp(0.25rem, 1.2vw, 0.55rem);
 `;
 
@@ -47,13 +53,13 @@ export function InvitationRevealSection({ reducedMotion }: Props) {
       <Inner>
         <RevealGroup reducedMotion={reducedMotion}>
           <StyledSectionTitle variants={v}>
-            Սիրով հրավիրում ենք Ձեզ
+            Սիրով հրավիրում եմ Ձեզ<br />միասին տոնելու իմ<br />կյանքի հետաքրքիր փուլի<br />հանդիսավոր մեկնարկը:
           </StyledSectionTitle>
           <DividerWrap variants={v}>
             <GoldDivider />
           </DividerWrap>
           <StyledSubtitle variants={v}>
-            մասնակցելու գեղեցիկ և հիշարժան երեկոյի
+            մասնակցելու գեղեցիկ<br />և հիշարժան երեկոյի
           </StyledSubtitle>
         </RevealGroup>
       </Inner>

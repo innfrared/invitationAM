@@ -23,11 +23,7 @@ export const GlobalStyle = createGlobalStyle`
     overflow: hidden;
     background: ${colors.ink};
     color: ${colors.cream};
-    font-family:
-      var(--font-arm-sans),
-      "Noto Sans Armenian",
-      system-ui,
-      sans-serif;
+    font-family: var(--font-arm-sans), "Noto Sans Armenian", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
