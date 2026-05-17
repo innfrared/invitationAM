@@ -139,7 +139,7 @@ export function BirthdayPersonSection({ reducedMotion }: Props) {
             <GoldDivider />
           </BottomRule>
           <EveningTagline variants={item}>
-          Ձեզ սպասվում է հուշերով, սիրով ու տոնական տրամադրությամբ լի գեղեցիկ երեկո։
+          Ձեզ սպասվում է հուշերով, սիրով ու տոնական տրամադրությամբ լի ջերմ երեկո։
           </EveningTagline>
         </Inner>
       </Stage>
