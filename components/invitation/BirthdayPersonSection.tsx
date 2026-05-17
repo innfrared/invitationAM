@@ -141,7 +141,7 @@ export function BirthdayPersonSection({ reducedMotion }: Props) {
           <EveningTagline variants={item}>
             Ձեզ սպասվում է երեկո՝ լի ջերմությամբ,
             <br />
-            հիշողություններով և ուրախությամբ
+            հիշողություններով և ուրախությամբ:
           </EveningTagline>
         </Inner>
       </Stage>

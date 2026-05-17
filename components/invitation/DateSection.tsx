@@ -93,12 +93,12 @@ export function DateSection({ reducedMotion }: Props) {
           <GoldDivider />
         </RuleAbove>
         <DateGlow>
-          <SectionTitleDate variants={item}>27 հունիսի, 2026</SectionTitleDate>
+          <SectionTitleDate variants={item}>27 հունիսի 2026</SectionTitleDate>
         </DateGlow>
         <RuleBelow variants={item}>
           <GoldDivider />
         </RuleBelow>
-        <SectionSubtitle variants={item}>Սպասում ենք Ձեզ սիրով</SectionSubtitle>
+        <SectionSubtitle variants={item}>Սպասում ենք Ձեզ սիրով:</SectionSubtitle>
       </Inner>
     </InvitationSection>
   );
