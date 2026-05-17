@@ -105,33 +105,76 @@ function SpeakerMutedIcon() {
 
 export function InvitationBackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const startedRef = useRef(false);
   const [muted, setMuted] = useState(false);
 
   const startPlayback = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio || audio.muted) return;
+    if (!audio || audio.muted || startedRef.current) return;
+
     try {
       await audio.play();
+      if (!audio.paused) {
+        startedRef.current = true;
+      }
     } catch {
-      /* Autoplay blocked until user gesture */
+      /* Blocked until browser allows audible autoplay */
     }
   }, []);
+
+  const bindAudio = useCallback(
+    (node: HTMLAudioElement | null) => {
+      audioRef.current = node;
+      if (!node) return;
+
+      node.volume = 0.82;
+      node.loop = true;
+      node.preload = "auto";
+      void startPlayback();
+    },
+    [startPlayback],
+  );
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = 0.82;
+
+    const onReady = () => {
+      void startPlayback();
+    };
+
+    audio.addEventListener("canplay", onReady);
+    audio.addEventListener("canplaythrough", onReady);
+    audio.addEventListener("loadeddata", onReady);
+
+    const retryTimers = [0, 120, 400, 900].map((delay) =>
+      window.setTimeout(() => {
+        void startPlayback();
+      }, delay),
+    );
+
     void startPlayback();
+
+    return () => {
+      audio.removeEventListener("canplay", onReady);
+      audio.removeEventListener("canplaythrough", onReady);
+      audio.removeEventListener("loadeddata", onReady);
+      retryTimers.forEach(window.clearTimeout);
+    };
   }, [startPlayback]);
 
   useEffect(() => {
     const resumeOnGesture = () => {
       void startPlayback();
     };
-    window.addEventListener("pointerdown", resumeOnGesture);
+
+    window.addEventListener("pointerdown", resumeOnGesture, { passive: true });
+    window.addEventListener("touchstart", resumeOnGesture, { passive: true });
     window.addEventListener("keydown", resumeOnGesture);
+
     return () => {
       window.removeEventListener("pointerdown", resumeOnGesture);
+      window.removeEventListener("touchstart", resumeOnGesture);
       window.removeEventListener("keydown", resumeOnGesture);
     };
   }, [startPlayback]);
@@ -145,8 +188,10 @@ export function InvitationBackgroundMusic() {
     setMuted(nextMuted);
 
     if (!nextMuted) {
-      void audio.play().catch(() => {
-        /* ignore */
+      void audio.play().then(() => {
+        if (!audio.paused) {
+          startedRef.current = true;
+        }
       });
     }
   }, []);
@@ -154,8 +199,9 @@ export function InvitationBackgroundMusic() {
   return (
     <>
       <audio
-        ref={audioRef}
+        ref={bindAudio}
         src={INVITE_SONG_SRC}
+        autoPlay
         loop
         preload="auto"
         playsInline
