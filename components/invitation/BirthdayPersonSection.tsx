@@ -6,10 +6,6 @@ import styled from "styled-components";
 import { GoldDivider } from "@/components/invitation/GoldDivider";
 import {
   BirthdayNameTitle,
-  CelebrationTitle,
-  EyebrowDivider,
-  EyebrowLabel,
-  EyebrowStack,
   SectionSubtitle,
 } from "@/components/invitation/InvitationTypography";
 import { InvitationSection } from "@/components/invitation/InvitationSection";
@@ -27,21 +23,27 @@ const Stage = styled.div`
   text-align: center;
 `;
 
+const NameStage = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: clamp(0.65rem, 2.2vw, 0.95rem);
+`;
+
 const WatermarkGlow = styled.div`
   position: absolute;
   left: 50%;
-  top: 52%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: min(92vw, 440px);
-  height: min(92vw, 440px);
+  width: min(100vw, 620px);
+  height: min(82vw, 400px);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(245, 217, 139, 0.26) 0%,
-    rgba(214, 177, 94, 0.12) 42%,
+    rgba(245, 217, 139, 0.32) 0%,
+    rgba(214, 177, 94, 0.14) 42%,
     transparent 68%
   );
-  filter: blur(14px);
+  filter: blur(12px);
   pointer-events: none;
   z-index: 0;
 `;
@@ -49,21 +51,21 @@ const WatermarkGlow = styled.div`
 const Watermark = styled.div`
   position: absolute;
   left: 50%;
-  top: 52%;
-  transform: translate(-50%, -50%);
+  top: 50%;
+  transform: translate(-50%, -52%);
   font-family: ${fonts.serif};
-  font-size: clamp(7.5rem, 40vw, 20rem);
-  font-weight: 700;
+  font-size: clamp(10.5rem, 52vw, 22rem);
+  font-weight: 800;
   line-height: 1;
-  color: rgba(245, 217, 139, 0.42);
-  opacity: 0.17;
+  color: rgba(245, 217, 139, 0.78);
+  opacity: 0.52;
   pointer-events: none;
   user-select: none;
   z-index: 0;
-  filter: blur(0.8px);
+  letter-spacing: -0.04em;
   text-shadow:
-    0 0 60px rgba(245, 217, 139, 0.35),
-    0 0 120px rgba(214, 177, 94, 0.22);
+    0 0 56px rgba(245, 217, 139, 0.55),
+    0 0 110px rgba(214, 177, 94, 0.35);
 `;
 
 const Inner = styled(motion.div)`
@@ -87,15 +89,17 @@ const Inner = styled(motion.div)`
 `;
 
 const StyledName = styled(BirthdayNameTitle)`
-  margin-bottom: clamp(0.65rem, 2.2vw, 0.95rem);
+  position: relative;
+  z-index: 1;
+  margin: 0;
 `;
 
 const TopRule = styled(motion.div)`
-  margin-bottom: clamp(1.25rem, 4vw, 2rem);
+  margin-bottom: clamp(2rem, 6vw, 3rem);
 `;
 
 const BottomRule = styled(motion.div)`
-  margin-top: clamp(1.25rem, 4vw, 2rem);
+  margin-top: clamp(2rem, 6vw, 3rem);
 `;
 
 const EveningTagline = styled(SectionSubtitle)`
@@ -115,8 +119,6 @@ export function BirthdayPersonSection({ reducedMotion }: Props) {
   return (
     <InvitationSection id="birthday-person" aria-labelledby="birthday-heading">
       <Stage>
-        <WatermarkGlow aria-hidden />
-        <Watermark aria-hidden="true">50</Watermark>
         <Inner
           variants={parent}
           initial="hidden"
@@ -126,17 +128,18 @@ export function BirthdayPersonSection({ reducedMotion }: Props) {
           <TopRule variants={item}>
             <GoldDivider />
           </TopRule>
-          <EyebrowStack variants={item}>
-            <EyebrowLabel id="birthday-heading">Տոնում ենք</EyebrowLabel>
-            <EyebrowDivider aria-hidden />
-          </EyebrowStack>
-          <StyledName variants={item}>Արթուր Մնացականյանի</StyledName>
-          <CelebrationTitle variants={item}>50-ամյակը</CelebrationTitle>
+          <NameStage>
+            <WatermarkGlow aria-hidden />
+            <Watermark aria-hidden="true">50</Watermark>
+            <StyledName id="birthday-heading" variants={item}>
+              Արթուր Մնացականյան
+            </StyledName>
+          </NameStage>
           <BottomRule variants={item}>
             <GoldDivider />
           </BottomRule>
           <EveningTagline variants={item}>
-            Երեկո՝ լի ջերմությամբ,
+            Ձեզ սպասվում է երեկո՝ լի ջերմությամբ,
             <br />
             հիշողություններով և ուրախությամբ
           </EveningTagline>

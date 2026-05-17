@@ -6,6 +6,7 @@ import { Suspense, useCallback, useMemo, useState } from "react";
 import { BirthdayPersonSection } from "@/components/invitation/BirthdayPersonSection";
 import { DateSection } from "@/components/invitation/DateSection";
 import { InvitationBackgroundMusic } from "@/components/invitation/InvitationBackgroundMusic";
+import { InvitationEntryOverlay } from "@/components/invitation/InvitationEntryOverlay";
 import { GoldParticlesBackground } from "@/components/invitation/GoldParticlesBackground";
 import { HeroSection } from "@/components/invitation/HeroSection";
 import { InvitationRevealSection } from "@/components/invitation/InvitationRevealSection";
@@ -19,9 +20,7 @@ import { SnapScrollContainer } from "@/components/invitation/SnapScrollContainer
 import { StepIndicator } from "@/components/invitation/StepIndicator";
 import { useActiveSection } from "@/components/invitation/useActiveSection";
 
-export function BirthdayInvitationPage() {
-  const reducedMotion = useReducedMotion();
-  const rm = !!reducedMotion;
+function InvitationExperience({ reducedMotion }: { reducedMotion: boolean }) {
   const [snapRoot, setSnapRoot] = useState<HTMLElement | null>(null);
   const captureSnapRoot = useCallback((node: HTMLElement | null) => {
     setSnapRoot(node);
@@ -43,16 +42,16 @@ export function BirthdayInvitationPage() {
 
   return (
     <>
-      <InvitationBackgroundMusic />
-      <GoldParticlesBackground reducedMotion={rm} />
+      <InvitationBackgroundMusic inviteOpened />
+      <GoldParticlesBackground reducedMotion={reducedMotion} />
       <SnapScrollContainer ref={captureSnapRoot}>
-        <HeroSection reducedMotion={rm} />
-        <InvitationRevealSection reducedMotion={rm} />
-        <BirthdayPersonSection reducedMotion={rm} />
-        <DateSection reducedMotion={rm} />
-        <LocationSection reducedMotion={rm} />
-        <Suspense fallback={<RSVPSectionFallback reducedMotion={rm} />}>
-          <RSVPSection reducedMotion={rm} />
+        <HeroSection reducedMotion={reducedMotion} />
+        <InvitationRevealSection reducedMotion={reducedMotion} />
+        <BirthdayPersonSection reducedMotion={reducedMotion} />
+        <DateSection reducedMotion={reducedMotion} />
+        <LocationSection reducedMotion={reducedMotion} />
+        <Suspense fallback={<RSVPSectionFallback reducedMotion={reducedMotion} />}>
+          <RSVPSection reducedMotion={reducedMotion} />
         </Suspense>
       </SnapScrollContainer>
       <StepIndicator
@@ -62,4 +61,25 @@ export function BirthdayInvitationPage() {
       />
     </>
   );
+}
+
+export function BirthdayInvitationPage() {
+  const reducedMotion = useReducedMotion();
+  const rm = !!reducedMotion;
+  const [inviteOpened, setInviteOpened] = useState(false);
+
+  const handleOpenInvite = useCallback(() => {
+    setInviteOpened(true);
+  }, []);
+
+  if (!inviteOpened) {
+    return (
+      <>
+        <InvitationEntryOverlay reducedMotion={rm} onOpen={handleOpenInvite} />
+        <audio src="/invitesong.mp3" preload="auto" hidden aria-hidden />
+      </>
+    );
+  }
+
+  return <InvitationExperience reducedMotion={rm} />;
 }

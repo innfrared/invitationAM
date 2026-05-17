@@ -103,81 +103,34 @@ function SpeakerMutedIcon() {
   );
 }
 
-export function InvitationBackgroundMusic() {
+type Props = {
+  inviteOpened: boolean;
+};
+
+export function InvitationBackgroundMusic({ inviteOpened }: Props) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const startedRef = useRef(false);
   const [muted, setMuted] = useState(false);
 
   const startPlayback = useCallback(async () => {
     const audio = audioRef.current;
-    if (!audio || audio.muted || startedRef.current) return;
-
+    if (!audio || audio.muted) return;
     try {
       await audio.play();
-      if (!audio.paused) {
-        startedRef.current = true;
-      }
     } catch {
-      /* Blocked until browser allows audible autoplay */
+      /* ignore */
     }
   }, []);
-
-  const bindAudio = useCallback(
-    (node: HTMLAudioElement | null) => {
-      audioRef.current = node;
-      if (!node) return;
-
-      node.volume = 0.82;
-      node.loop = true;
-      node.preload = "auto";
-      void startPlayback();
-    },
-    [startPlayback],
-  );
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
-    const onReady = () => {
-      void startPlayback();
-    };
-
-    audio.addEventListener("canplay", onReady);
-    audio.addEventListener("canplaythrough", onReady);
-    audio.addEventListener("loadeddata", onReady);
-
-    const retryTimers = [0, 120, 400, 900].map((delay) =>
-      window.setTimeout(() => {
-        void startPlayback();
-      }, delay),
-    );
-
-    void startPlayback();
-
-    return () => {
-      audio.removeEventListener("canplay", onReady);
-      audio.removeEventListener("canplaythrough", onReady);
-      audio.removeEventListener("loadeddata", onReady);
-      retryTimers.forEach(window.clearTimeout);
-    };
-  }, [startPlayback]);
+    audio.volume = 0.82;
+  }, []);
 
   useEffect(() => {
-    const resumeOnGesture = () => {
-      void startPlayback();
-    };
-
-    window.addEventListener("pointerdown", resumeOnGesture, { passive: true });
-    window.addEventListener("touchstart", resumeOnGesture, { passive: true });
-    window.addEventListener("keydown", resumeOnGesture);
-
-    return () => {
-      window.removeEventListener("pointerdown", resumeOnGesture);
-      window.removeEventListener("touchstart", resumeOnGesture);
-      window.removeEventListener("keydown", resumeOnGesture);
-    };
-  }, [startPlayback]);
+    if (!inviteOpened) return;
+    void startPlayback();
+  }, [inviteOpened, startPlayback]);
 
   const toggleMute = useCallback(() => {
     const audio = audioRef.current;
@@ -188,10 +141,8 @@ export function InvitationBackgroundMusic() {
     setMuted(nextMuted);
 
     if (!nextMuted) {
-      void audio.play().then(() => {
-        if (!audio.paused) {
-          startedRef.current = true;
-        }
+      void audio.play().catch(() => {
+        /* ignore */
       });
     }
   }, []);
@@ -199,22 +150,23 @@ export function InvitationBackgroundMusic() {
   return (
     <>
       <audio
-        ref={bindAudio}
+        ref={audioRef}
         src={INVITE_SONG_SRC}
-        autoPlay
         loop
         preload="auto"
         playsInline
       />
-      <ToggleBtn
-        type="button"
-        onClick={toggleMute}
-        aria-pressed={muted}
-        aria-label={muted ? "Միացնել երաժշտությունը" : "Անջատել երաժշտությունը"}
-        title={muted ? "Միացնել երաժշտությունը" : "Անջատել երաժշտությունը"}
-      >
-        {muted ? <SpeakerMutedIcon /> : <SpeakerOnIcon />}
-      </ToggleBtn>
+      {inviteOpened ? (
+        <ToggleBtn
+          type="button"
+          onClick={toggleMute}
+          aria-pressed={muted}
+          aria-label={muted ? "Միացնել երաժշտությունը" : "Անջատել երաժշտությունը"}
+          title={muted ? "Միացնել երաժշտությունը" : "Անջատել երաժշտությունը"}
+        >
+          {muted ? <SpeakerMutedIcon /> : <SpeakerOnIcon />}
+        </ToggleBtn>
+      ) : null}
     </>
   );
 }
