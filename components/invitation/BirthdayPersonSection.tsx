@@ -95,11 +95,11 @@ const StyledName = styled(BirthdayNameTitle)`
 `;
 
 const TopRule = styled(motion.div)`
-  margin-bottom: clamp(2rem, 6vw, 3rem);
+  margin-bottom: clamp(3.5rem, 11vw, 5.5rem);
 `;
 
 const BottomRule = styled(motion.div)`
-  margin-top: clamp(2rem, 6vw, 3rem);
+  margin-top: clamp(3.5rem, 11vw, 5.5rem);
 `;
 
 const EveningTagline = styled(SectionSubtitle)`

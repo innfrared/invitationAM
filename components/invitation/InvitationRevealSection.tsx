@@ -53,13 +53,13 @@ export function InvitationRevealSection({ reducedMotion }: Props) {
       <Inner>
         <RevealGroup reducedMotion={reducedMotion}>
           <StyledSectionTitle variants={v}>
-            Սիրով հրավիրում եմ Ձեզ<br />միասին տոնելու իմ<br />կյանքի հետաքրքիր փուլի<br />հանդիսավոր մեկնարկը:
+            Սիրով հրավիրում եմ Ձեզ<br />միասին տոնելու իմ<br />կյանքի հետաքրքիր փուլի<br />հանդիսավոր մեկնարկը,
           </StyledSectionTitle>
           <DividerWrap variants={v}>
             <GoldDivider />
           </DividerWrap>
           <StyledSubtitle variants={v}>
-            մասնակցելու գեղեցիկ<br />և հիշարժան երեկոյի
+            մասնակցելու գեղեցիկ<br />և հիշարժան երեկոյի:
           </StyledSubtitle>
         </RevealGroup>
       </Inner>
